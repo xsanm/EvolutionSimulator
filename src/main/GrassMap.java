@@ -1,9 +1,10 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class GrassMap implements IGrassMap{
-    protected TreeSet<MapElement> grasses;
+    protected TreeMap<Vector2D, MapElement> grasses;
     private final int MAP_WIDTH;
     private final int MAP_HEIGHT;
     IWorldMap map;
@@ -12,7 +13,7 @@ public class GrassMap implements IGrassMap{
         map = imap;
         MAP_WIDTH = map_width;
         MAP_HEIGHT = map_height;
-        grasses = new TreeSet<>();
+        grasses = new TreeMap<>();
     }
 
     //TODO
@@ -27,25 +28,21 @@ public class GrassMap implements IGrassMap{
         }
     }
 
-    public TreeSet<MapElement> getGrasses() {
-        return grasses;
-    }
 
     @Override
     public boolean place(MapElement element) {
-        grasses.add(element);
+        grasses.put(element.getPosition(), element);
         return true;
     }
 
     @Override
     public boolean isOccupied(Vector2D position) {
-        return grasses.contains(new MapElement(position));
+        return grasses.get(position) != null;
     }
 
     @Override
     public MapElement objectAt(Vector2D position) {
-        //TODO
-        return null;
+        return grasses.get(position);
     }
 
     @Override

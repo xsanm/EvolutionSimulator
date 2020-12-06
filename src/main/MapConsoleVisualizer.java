@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.SortedSet;
 
 public class MapConsoleVisualizer {
     private static final String EMPTY_CELL = " ";

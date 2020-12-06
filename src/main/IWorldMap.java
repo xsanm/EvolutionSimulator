@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 
 public interface IWorldMap {
     /**
@@ -33,6 +34,13 @@ public interface IWorldMap {
      * @param position The position of the object.
      * @return Object or null if the position is not occupied.
      */
-    ArrayList<Animal> objectAt(Vector2D position);
+    List<Animal> objectAt(Vector2D position);
 
+    TreeMap<Vector2D, List<Animal>> getAnimals();
+
+    public GrassMap getGrassMap();
+
+    public int getMAP_HEIGHT();
+
+    public int getMAP_WIDTH();
 }

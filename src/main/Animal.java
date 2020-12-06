@@ -1,14 +1,19 @@
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
-public class Animal {
+public class Animal implements Comparable<Animal> {
     private Vector2D position;
     private int orientation;
     private Genotype genotype;
     private double energy;
+    private List<IPositionChangeObserver> observers = new ArrayList<>();
 
     public Animal(){
 
     }
+
     public Animal(Vector2D position, Genotype genotype, double energy){
         this.position = position;
         this.genotype = genotype;
@@ -16,15 +21,30 @@ public class Animal {
         this.energy = energy;
     }
 
+    public Animal(Vector2D position, Genotype genotype, double energy, IPositionChangeObserver obs) {
+        this.position = position;
+        this.genotype = genotype;
+        this.orientation = genotype.getRandomGene();
+        this.energy = energy;
+        observers.add(obs);
+    }
+
     public void move() {
         this.orientation = genotype.getRandomGene();
         Vector2D oldPosition = this.position;
-        Vector2D newPosition = this.position.add(genotype.genToUnitVector(this.orientation));
+        //TODO
+        Vector2D moveVector = genotype.genToUnitVector(this.orientation).add(this.position).add(new Vector2D(5, 5));
+        Vector2D newPosition = new Vector2D(moveVector.x % 5, moveVector.y % 5);
+        this.position = newPosition;
+        System.out.println("rooszam sie" + oldPosition + newPosition);
+        System.out.println(this);
+        this.positionChanged(this, oldPosition, newPosition);
     }
 
     public Vector2D getPosition(){
         return this.position;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -41,10 +61,22 @@ public class Animal {
     @Override
     public String toString() {
         return "Animal{" +
+                ", energy=" + energy +
                 "position=" + position +
                 ", orientation=" + orientation +
                 ", genotype=" + genotype +
-                ", energy=" + energy +
+
                 '}';
+    }
+
+    @Override
+    public int compareTo(Animal o) {
+        return (int) (this.energy - o.energy);
+    }
+
+    public void positionChanged(Animal animal, Vector2D oldPosition, Vector2D newPosition){
+        for(IPositionChangeObserver observer : this.observers){
+            observer.positionChanged(this, oldPosition, newPosition);
+        }
     }
 }
