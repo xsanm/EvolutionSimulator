@@ -1,4 +1,6 @@
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected TreeMap<Vector2D, List<Animal>> animals;
@@ -12,6 +14,9 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         MAP_HEIGHT = map_height;
         animals = new TreeMap<>();
     }
+
+
+
 
     @Override
     public boolean canMoveTo(Vector2D position) {

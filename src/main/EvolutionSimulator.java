@@ -34,7 +34,7 @@ public class EvolutionSimulator {
 
 
         MainWindow m = new MainWindow(simulationEngine);
-
+        m.setVisible(true);
 
     }
 }

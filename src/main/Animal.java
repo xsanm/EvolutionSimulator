@@ -1,9 +1,10 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-public class Animal implements Comparable<Animal> {
+public class Animal implements Comparable<Animal>, Drawable {
     private Vector2D position;
     private int orientation;
     private Genotype genotype;
@@ -27,6 +28,10 @@ public class Animal implements Comparable<Animal> {
         this.orientation = genotype.getRandomGene();
         this.energy = energy;
         observers.add(obs);
+    }
+
+    public Animal(Vector2D vector2D) {
+        this.position = vector2D;
     }
 
     public void move() {
@@ -78,5 +83,10 @@ public class Animal implements Comparable<Animal> {
         for(IPositionChangeObserver observer : this.observers){
             observer.positionChanged(this, oldPosition, newPosition);
         }
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        g.fillOval(position.x, position.y, 30, 30);
     }
 }
