@@ -4,14 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DataPanel implements ActionListener {
-    public int mapWidth;
+public class DataPanel extends JPanel implements ActionListener {
+    SimulationEngine simulationEngine;
     DataManager dataManager;
-
     GridBagConstraints constraints;
-
     JPanel dataPanel;
-
     private JSpinner widthSpinner;
     private JSpinner heightSpinner;
     private JSpinner animalsNumberSpinner;
@@ -20,53 +17,34 @@ public class DataPanel implements ActionListener {
     private JSpinner grassEnergySpinner;
     private JSpinner jungleRatioSpinner;
     private JCheckBox twoMapCheckbox;
+    JButton appplyBtn;
+    JButton resetBtn;
+    JButton startBtn;
+    JButton stopBtn;
+    JButton stepBtn;
+    JButton saveBtn;
 
 
     public DataPanel(SimulationEngine simulationEngine, DataManager dataManager){
         this.dataManager = dataManager;
+        this.simulationEngine = simulationEngine;
         constraints = new GridBagConstraints();
+        constraints.insets = new Insets(2,2,2,2);
+
         dataPanel = new JPanel();
         //dataPanel.setMaximumSize(new Dimension(300, 300));
-
-
-
         dataPanel.setLayout(new GridBagLayout());
         dataPanel.setPreferredSize(new Dimension(250, 500));
 
-
-        widthSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 50, 1));
-        heightSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 50, 1));
+        widthSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 50, 1));
+        heightSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 50, 1));
         animalsNumberSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 50, 1));
         startEnergySpinner = new JSpinner(new SpinnerNumberModel(2.5, 0, 5.0, 0.1));
-        moveEnergySpinner = new JSpinner(new SpinnerNumberModel(1.5, 0, 3.0, 0.1));
+        moveEnergySpinner = new JSpinner(new SpinnerNumberModel(0.5, 0, 3.0, 0.1));
         grassEnergySpinner = new JSpinner(new SpinnerNumberModel(1.0, 0, 3.0, 0.1));
         jungleRatioSpinner = new JSpinner(new SpinnerNumberModel(0.50, 0, 1.0, 0.1));
-
         twoMapCheckbox = new JCheckBox();
 
-
-
-        constraints.insets = new Insets(2,2,2,2);
-
-
-
-
-
-        /*dataPanel.setLayout(new GridLayout(8, 1));
-
-        widthPanel = new JPanel(new GridLayout(1, 2));
-        widthPanel.add(new JLabel("Map Width"));
-        mapWidthField = new JTextField();
-        widthPanel.add(mapWidthField);
-        dataPanel.add(widthPanel);
-
-        JButton applyData = new JButton("apply Data");
-        applyData.addActionListener(simulationEngine);
-
-
-        dataPanel.add(applyData);*/
-
-        int x, y;  // for clarity
 
         addGB(new JTextArea("Specify Simulation Data"), 0, 0, 2, 1);
 
@@ -78,14 +56,9 @@ public class DataPanel implements ActionListener {
 
         addGB(new JLabel("Starting animal number"),  0, 3, 1, 1);
         addGB(animalsNumberSpinner,  1, 3, 1, 1);
-        //addGB(new JLabel("Starting animal number"),  0, 3, 1, 1);
-
 
         addGB(new JLabel("Starting Energy"),  0, 4, 1, 1);
         addGB(startEnergySpinner,  1, 4, 1, 1);
-        //startEnergySpinner.setEditor(new JSpinner.NumberEditor(startEnergySpinner).);
-
-
 
         addGB(new JLabel("Move Energy"),  0, 5, 1, 1);
         addGB(moveEnergySpinner,  1, 5, 1, 1);
@@ -100,58 +73,41 @@ public class DataPanel implements ActionListener {
         addGB(twoMapCheckbox,  1, 8, 1, 1);
 
 
-
         JSeparator sep1 = new JSeparator();
-
-        sep1.setBorder(new EmptyBorder(120, 120, 120, 120));
-
         addGB(sep1,  0, 9, 2, 1);
 
-
-
-
-        JButton appplyBtn = new JButton("Apply Changes");
-        //j.addActionListener(simulationEngine);
+        appplyBtn = new JButton("Apply Changes");
+        appplyBtn.addActionListener(simulationEngine);
         appplyBtn.addActionListener(this);
-        //appplyBtn.setPreferredSize(new Dimension(80, 40));
         addGB(appplyBtn,  0, 10, 1, 1);
 
-
-        JButton resetBtn = new JButton("Reset Default");
-        //j.addActionListener(simulationEngine);
+        resetBtn = new JButton("Reset Default");
+        resetBtn.addActionListener(simulationEngine);
         resetBtn.addActionListener(this);
-        //resetBtn.setPreferredSize(new Dimension(80, 40));
         addGB(resetBtn,  1, 10, 1, 1);
 
-
-        //sep.setMinimumSize(new Dimension());
         JSeparator sep2 = new JSeparator();
         addGB(sep2,  0, 11, 2, 1);
 
-        JButton startBtn = new JButton("START");
-        //j.addActionListener(simulationEngine);
-        appplyBtn.addActionListener(this);
+        startBtn = new JButton("START");
+        startBtn.addActionListener(simulationEngine);
+        //startBtn.addActionListener(this);
         addGB(startBtn,  0, 12, 1, 1);
 
-        JButton stopBtn = new JButton("STOP");
-        //j.addActionListener(simulationEngine);
-        appplyBtn.addActionListener(this);
+        stopBtn = new JButton("STOP");
+        stopBtn.addActionListener(simulationEngine);
+        //stopBtn.addActionListener(this);
         addGB(stopBtn,  1, 12, 1, 1);
 
-        JButton setBtn = new JButton("Make Step");
-        //j.addActionListener(simulationEngine);
-        appplyBtn.addActionListener(this);
-        addGB(setBtn,  0, 13, 1, 1);
+        stepBtn = new JButton("Make Step");
+        stepBtn.addActionListener(simulationEngine);
+        //appplyBtn.addActionListener(this);
+        addGB(stepBtn,  0, 13, 1, 1);
 
-        JButton saveBtn = new JButton("save");
-        //j.addActionListener(simulationEngine);
-        appplyBtn.addActionListener(this);
+        saveBtn = new JButton("save");
+        //saveBtn.addActionListener(simulationEngine);
+        //saveBtn.addActionListener(this);
         addGB(saveBtn,  1, 13, 1, 1);
-
-        //addGB(new JButton("West"),   x = 0, y = 1);
-        //addGB(new JButton("Center"), x = 1, y = 1);
-        //addGB(new JButton("East"),   x = 2, y = 1);
-        //addGB(new JButton("South"),  x = 1, y = 2);
 
     }
 
@@ -166,22 +122,39 @@ public class DataPanel implements ActionListener {
 
         constraints.weightx = (x == 0) ? 0.1 : 1.0;
 
-
         dataPanel.add(component, constraints);
     }
-
-
 
     public JPanel getDataPanel() {
         return dataPanel;
     }
 
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e.getActionCommand());
-        System.out.println(widthSpinner.getValue());
+        switch (e.getActionCommand()) {
+            case "Apply changes":
+                applyData();
+                break;
+            case "Reset Default":
+                resetData();
+                break;
+        }
+    }
+
+    private void applyData() {
         dataManager.mapWidth = (int) widthSpinner.getValue();
+        dataManager.mapHeight = (int) heightSpinner.getValue();
+        dataManager.startAnimalNumber = (int) animalsNumberSpinner.getValue();
+        dataManager.startEnergy = (double) startEnergySpinner.getValue();
+        dataManager.moveEnergy = (double) moveEnergySpinner.getValue();
+        dataManager.grassEnergy = (double) grassEnergySpinner.getValue();
+        dataManager.jungleRatio = (double) jungleRatioSpinner.getValue();
+        dataManager.twoMaps = twoMapCheckbox.isSelected();
+    }
+
+    private void resetData() {
+        dataManager = new DataManager();
     }
 }

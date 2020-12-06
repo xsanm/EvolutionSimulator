@@ -1,5 +1,9 @@
 public class EvolutionSimulator {
     public static void main(String[] args) {
+
+        DataManager dataManager = new DataManager();
+
+
         System.out.println("Hello");
 
         Genotype g1 = new Genotype();
@@ -19,8 +23,6 @@ public class EvolutionSimulator {
         System.out.println(mapa.objectAt(new Vector2D(1, 1)).get(0));
         //System.out.println(mapa);
 
-
-        DataManager dataManager = new DataManager();
 
 
 

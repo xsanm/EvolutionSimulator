@@ -56,7 +56,7 @@ public class MainWindow extends JFrame implements ComponentListener {
 
 
         MapPanel mapa1 = new MapPanel(10, 10);
-        MapPanel mapa2 = new MapPanel(10, 10);
+        //MapPanel mapa2 = new MapPanel(10, 10);
         //mapa1.setSize(new Dimension(25 * 130, 25 * 130));
 
         JPanel map1Pane = new JPanel();
@@ -70,7 +70,7 @@ public class MainWindow extends JFrame implements ComponentListener {
         map1Pane.add(new Label("stat1"));
 
         JPanel map2Pane = new JPanel(new FlowLayout());
-        map2Pane.add(mapa2);
+        //map2Pane.add(mapa2);
 
         //mainPanel.add(dataPanel.getDataPanel());
         //mainPanel.add(mapPanel.getMap());

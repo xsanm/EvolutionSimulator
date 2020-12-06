@@ -98,7 +98,7 @@ public class SimulationEngine implements IEngine, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(e.toString());
         System.out.println(e.getActionCommand());
+
     }
 }
