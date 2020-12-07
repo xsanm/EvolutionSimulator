@@ -47,4 +47,6 @@ public interface IWorldMap {
     public Vector2D getJungleBegin();
 
     public Vector2D getJungleEnd();
+
+    void addRandomAnimal();
 }

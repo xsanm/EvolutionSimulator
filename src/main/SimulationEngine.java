@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine implements IEngine, ActionListener {
@@ -14,7 +15,7 @@ public class SimulationEngine implements IEngine, ActionListener {
 
     public SimulationEngine(){
         this.dataManager = new DataManager();
-        this.map = new WorldMap(dataManager.mapWidth, dataManager.mapHeight, dataManager.jungleRatio);
+        this.map = new WorldMap(dataManager);
         //m = new MainWindow(this, dataManager, mapa1, mapa2);
         this.mapa1 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
         this.mapa2 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
@@ -23,7 +24,12 @@ public class SimulationEngine implements IEngine, ActionListener {
         initialize();
     }
     public void initialize() {
-        this.map = new WorldMap(dataManager.mapWidth, dataManager.mapHeight, dataManager.jungleRatio);
+        this.map = new WorldMap(dataManager);
+        for(int i = 0; i < dataManager.startAnimalNumber; i++){
+            map.addRandomAnimal();
+        }
+
+
         animalList = new ArrayList<>();
         //TODO
         TreeMap<Vector2D, List<Animal>> animals = map.getAnimals();
@@ -40,36 +46,34 @@ public class SimulationEngine implements IEngine, ActionListener {
                 }
             }
         }
+        for(int i = 0; i < this.animalList.size(); i++) {
+            mapa1.drawAnimal(animalList.get(i));
+        }
+        //run();
     }
 
-    @Override
-    public void run(DrawAnimalsOld zoo){
+
+    public void run(){
         //TODO
-        JFrame frame = new JFrame("App");
-        frame.setContentPane(zoo.table1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
 
         TreeMap<Vector2D, List<Animal>> animals = map.getAnimals();
         GrassMap grassMap = map.getGrassMap();
         System.out.println(map);
-        int ages = 3;
+        int ages = 30;
         while(ages-- > 0) {
 
           for(int i = 0; i < this.animalList.size(); i++) {
-               this.animalList.get(i).move();
+               Animal a = this.animalList.get(i);
+               mapa1.eraseAnimal(a);
+               a.move();
+               mapa1.drawAnimal(a);
            }
-
-
-
-
 
             System.out.println(map);
 
 
 
-            for (int i = 0; i < zoo.height; i++) {
+/*            for (int i = 0; i < zoo.height; i++) {
                 for (int j = 0; j < zoo.width; j++) {
 
                     if (animals.get(new Vector2D(i, j)) != null) {
@@ -81,7 +85,7 @@ public class SimulationEngine implements IEngine, ActionListener {
 
                     }
                 }
-            }
+            }*/
 
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -106,26 +110,29 @@ public class SimulationEngine implements IEngine, ActionListener {
         System.out.println(e.getActionCommand());
         switch (e.getActionCommand()) {
             case "Apply Changes":
-                initialize();
+
                 mapa1.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
                 mapa2.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
                 m.steerSecondMap(dataManager.twoMaps);
-
+                initialize();
                 m.pack();
                 //
                 break;
             case "Reset Default":
                 dataManager.resetData();
-                initialize();
-                //initialize();
+
                 mapa1.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
                 mapa2.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
                 m.steerSecondMap(dataManager.twoMaps);
-
+                initialize();
                 m.pack();
             default:
                 break;
         }
+    }
+
+    private int generateRandom(int min, int max){
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
 
@@ -145,11 +152,11 @@ public class SimulationEngine implements IEngine, ActionListener {
 
 
         //WorldMap mapa = new WorldMap(5, 5);
-        map.place(new Animal(new Vector2D(2, 3), g1, 1, (IPositionChangeObserver) map));
-        map.place(new Animal(new Vector2D(1, 1), g1, 2, (IPositionChangeObserver) map));
-        map.place(new Animal(new Vector2D(1, 1), g1, 3, (IPositionChangeObserver) map));
+        //map.place(new Animal(new Vector2D(2, 3), g1, 1, (IPositionChangeObserver) map));
+        ///map.place(new Animal(new Vector2D(1, 1), g1, 2, (IPositionChangeObserver) map));
+        //map.place(new Animal(new Vector2D(1, 1), g1, 3, (IPositionChangeObserver) map));
         //map.addGrass();
-        System.out.println(map.objectAt(new Vector2D(1, 1)).get(0));
+        //System.out.println(map.objectAt(new Vector2D(1, 1)).get(0));
         //System.out.println(mapa);
 
 
@@ -158,7 +165,7 @@ public class SimulationEngine implements IEngine, ActionListener {
 
 
 
-        DrawAnimalsOld zoo = new DrawAnimalsOld(5, 5);
+        //DrawAnimalsOld zoo = new DrawAnimalsOld(5, 5);
 
         //SimulationEngine simulationEngine = new SimulationEngine(map, dataManager, mapa1, mapa2);
         //SimulationEngine simulationEngine = new SimulationEngine(mapa);

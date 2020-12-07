@@ -82,6 +82,7 @@ public class Animal implements Comparable<Animal>, Drawable {
     public void positionChanged(Animal animal, Vector2D oldPosition, Vector2D newPosition){
         for(IPositionChangeObserver observer : this.observers){
             observer.positionChanged(this, oldPosition, newPosition);
+
         }
     }
 

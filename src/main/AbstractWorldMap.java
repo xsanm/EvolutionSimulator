@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.round;
 
@@ -11,13 +12,15 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     private GrassMap grassMap;
     private Vector2D jungleBegin;
     private Vector2D jungleEnd;
+    private DataManager dataManager;
     double jungleRatio;
 
-    public AbstractWorldMap(int map_width, int map_height, double jungleRatio){
-        grassMap = new GrassMap(this, map_width, map_height);
-        MAP_WIDTH = map_width;
-        MAP_HEIGHT = map_height;
-        this.jungleRatio = jungleRatio;
+    public AbstractWorldMap(DataManager dataManager){
+        this.dataManager = dataManager;
+        grassMap = new GrassMap(this, dataManager.mapWidth, dataManager.mapHeight);
+        MAP_WIDTH = dataManager.mapWidth;
+        MAP_HEIGHT = dataManager.mapHeight;
+        this.jungleRatio = dataManager.jungleRatio;
         animals = new TreeMap<>();
         countJungleRanges();
     }
@@ -101,4 +104,15 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         //mapBoundary.positionChanged(oldPosition, newPosition);
         //mapBoundary.positionChanged(oldPosition, newPosition);
     }
+
+    public void addRandomAnimal(){
+        this.place(
+                new Animal(new Vector2D(generateRandom(0, dataManager.mapWidth), generateRandom(0, dataManager.mapHeight)),
+                        new Genotype(), 1, (IPositionChangeObserver) this));
+    }
+
+    private int generateRandom(int min, int max){
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
+    }
+
 }

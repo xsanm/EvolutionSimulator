@@ -31,6 +31,16 @@ public class MapPanel extends JPanel{
         }
     }
 
+    public void drawAnimal(Animal animal){
+        System.out.println(animal);
+        DrawMap panel = panels[animal.getPosition().x][animal.getPosition().y];
+        panel.setDrawable(animal);
+    }
+    public void eraseAnimal(Animal animal){
+        System.out.println(animal);
+        DrawMap panel = panels[animal.getPosition().x][animal.getPosition().y];
+        panel.setDrawable(null);
+    }
 
 
     public void drawSomething(int x, int y){
