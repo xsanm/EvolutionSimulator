@@ -1,4 +1,4 @@
 public interface IEngine {
-    void run();
+    void runSimulation();
     public void run(DrawAnimalsOld zoo) throws InterruptedException;
 }

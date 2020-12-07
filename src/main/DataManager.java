@@ -12,6 +12,10 @@ public class DataManager{
     boolean twoMaps;
 
     public DataManager(){
+        resetData();
+    }
+
+    public void resetData(){
         mapWidth = 10;
         mapHeight = 10;
         startAnimalNumber = 5;

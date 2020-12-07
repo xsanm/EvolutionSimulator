@@ -5,10 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DataPanel extends JPanel implements ActionListener {
+
     SimulationEngine simulationEngine;
     DataManager dataManager;
     GridBagConstraints constraints;
-    JPanel dataPanel;
     private JSpinner widthSpinner;
     private JSpinner heightSpinner;
     private JSpinner animalsNumberSpinner;
@@ -31,10 +31,9 @@ public class DataPanel extends JPanel implements ActionListener {
         constraints = new GridBagConstraints();
         constraints.insets = new Insets(2,2,2,2);
 
-        dataPanel = new JPanel();
         //dataPanel.setMaximumSize(new Dimension(300, 300));
-        dataPanel.setLayout(new GridBagLayout());
-        dataPanel.setPreferredSize(new Dimension(250, 500));
+        this.setLayout(new GridBagLayout());
+        this.setPreferredSize(new Dimension(250, 500));
 
         widthSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 50, 1));
         heightSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 50, 1));
@@ -105,7 +104,7 @@ public class DataPanel extends JPanel implements ActionListener {
         addGB(stepBtn,  0, 13, 1, 1);
 
         saveBtn = new JButton("save");
-        //saveBtn.addActionListener(simulationEngine);
+        saveBtn.addActionListener(simulationEngine);
         //saveBtn.addActionListener(this);
         addGB(saveBtn,  1, 13, 1, 1);
 
@@ -122,23 +121,17 @@ public class DataPanel extends JPanel implements ActionListener {
 
         constraints.weightx = (x == 0) ? 0.1 : 1.0;
 
-        dataPanel.add(component, constraints);
+        this.add(component, constraints);
     }
 
-    public JPanel getDataPanel() {
-        return dataPanel;
-    }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e.getActionCommand());
         switch (e.getActionCommand()) {
-            case "Apply changes":
+            case "Apply Changes":
                 applyData();
-                break;
-            case "Reset Default":
-                resetData();
                 break;
         }
     }
@@ -155,6 +148,6 @@ public class DataPanel extends JPanel implements ActionListener {
     }
 
     private void resetData() {
-        dataManager = new DataManager();
+        this.dataManager = new DataManager();
     }
 }

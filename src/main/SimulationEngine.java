@@ -5,11 +5,25 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine implements IEngine, ActionListener {
-    private final IWorldMap map;
+    private IWorldMap map;
+    DataManager dataManager;
     List<Animal> animalList;
+    MapPanel mapa1;
+    MapPanel mapa2;
+    MainWindow m;
 
-    public SimulationEngine(IWorldMap map){
-        this.map = map;
+    public SimulationEngine(){
+        this.dataManager = new DataManager();
+        this.map = new WorldMap(dataManager.mapWidth, dataManager.mapHeight, dataManager.jungleRatio);
+        //m = new MainWindow(this, dataManager, mapa1, mapa2);
+        this.mapa1 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
+        this.mapa2 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
+        m = new MainWindow(this, dataManager, mapa1, mapa2);
+
+        initialize();
+    }
+    public void initialize() {
+        this.map = new WorldMap(dataManager.mapWidth, dataManager.mapHeight, dataManager.jungleRatio);
         animalList = new ArrayList<>();
         //TODO
         TreeMap<Vector2D, List<Animal>> animals = map.getAnimals();
@@ -26,15 +40,6 @@ public class SimulationEngine implements IEngine, ActionListener {
                 }
             }
         }
-    }
-
-    public SimulationEngine(WorldMap mapa, IPositionChangeObserver mapa1) {
-        this.map = mapa;
-    }
-
-    @Override
-    public void run() {
-        ;
     }
 
     @Override
@@ -99,6 +104,69 @@ public class SimulationEngine implements IEngine, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e.getActionCommand());
+        switch (e.getActionCommand()) {
+            case "Apply Changes":
+                initialize();
+                mapa1.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
+                mapa2.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
+                m.steerSecondMap(dataManager.twoMaps);
+
+                m.pack();
+                //
+                break;
+            case "Reset Default":
+                dataManager.resetData();
+                initialize();
+                //initialize();
+                mapa1.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
+                mapa2.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
+                m.steerSecondMap(dataManager.twoMaps);
+
+                m.pack();
+            default:
+                break;
+        }
+    }
+
+
+
+    public void runSimulation() {
+        //DataManager dataManager = new DataManager();
+
+        System.out.println("Hello");
+
+        Genotype g1 = new Genotype();
+        Genotype g2 = new Genotype();
+        Genotype g3 = new Genotype(g1.getGenes(), g2.getGenes());
+        System.out.println(g1);
+        System.out.println(g2);
+        System.out.println(g3);
+        //for(int i = 0; i < 10; i++) System.out.println(g3.getRandomGene());
+
+
+        //WorldMap mapa = new WorldMap(5, 5);
+        map.place(new Animal(new Vector2D(2, 3), g1, 1, (IPositionChangeObserver) map));
+        map.place(new Animal(new Vector2D(1, 1), g1, 2, (IPositionChangeObserver) map));
+        map.place(new Animal(new Vector2D(1, 1), g1, 3, (IPositionChangeObserver) map));
+        //map.addGrass();
+        System.out.println(map.objectAt(new Vector2D(1, 1)).get(0));
+        //System.out.println(mapa);
+
+
+        //MapPanel mapa1 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight);
+        //MapPanel mapa2 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight);
+
+
+
+        DrawAnimalsOld zoo = new DrawAnimalsOld(5, 5);
+
+        //SimulationEngine simulationEngine = new SimulationEngine(map, dataManager, mapa1, mapa2);
+        //SimulationEngine simulationEngine = new SimulationEngine(mapa);
+        //simulationEngine.run(zoo);
+
+
+        //MainWindow m = new MainWindow(this, dataManager, mapa1, mapa2);
+        m.setVisible(true);
 
     }
 }

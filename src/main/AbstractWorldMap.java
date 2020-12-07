@@ -2,21 +2,40 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import static java.lang.Math.round;
+
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected TreeMap<Vector2D, List<Animal>> animals;
     private final int MAP_WIDTH;
     private final int MAP_HEIGHT;
     private GrassMap grassMap;
+    private Vector2D jungleBegin;
+    private Vector2D jungleEnd;
+    double jungleRatio;
 
-    public AbstractWorldMap(int map_width, int map_height){
+    public AbstractWorldMap(int map_width, int map_height, double jungleRatio){
         grassMap = new GrassMap(this, map_width, map_height);
         MAP_WIDTH = map_width;
         MAP_HEIGHT = map_height;
+        this.jungleRatio = jungleRatio;
         animals = new TreeMap<>();
+        countJungleRanges();
     }
 
+    private void countJungleRanges() {
+        int x = (int) ( MAP_WIDTH * jungleRatio);
+        int y = (int) ( MAP_HEIGHT * jungleRatio);
+        jungleBegin = new Vector2D((MAP_WIDTH - x) / 2,  (MAP_HEIGHT - y) / 2);
+        jungleEnd = new Vector2D(jungleBegin.x + x, jungleBegin.y + y);
+    }
 
+    public Vector2D getJungleBegin() {
+        return jungleBegin;
+    }
 
+    public Vector2D getJungleEnd() {
+        return jungleEnd;
+    }
 
     @Override
     public boolean canMoveTo(Vector2D position) {

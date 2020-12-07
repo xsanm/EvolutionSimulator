@@ -43,4 +43,8 @@ public interface IWorldMap {
     public int getMAP_HEIGHT();
 
     public int getMAP_WIDTH();
+
+    public Vector2D getJungleBegin();
+
+    public Vector2D getJungleEnd();
 }
