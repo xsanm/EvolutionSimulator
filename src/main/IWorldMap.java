@@ -38,8 +38,6 @@ public interface IWorldMap {
 
     TreeMap<Vector2D, List<Animal>> getAnimals();
 
-    public GrassMap getGrassMap();
-
     public int getMAP_HEIGHT();
 
     public int getMAP_WIDTH();
@@ -63,5 +61,7 @@ public interface IWorldMap {
     public void procreate() ;
 
     public void addGrass() ;
+
+    public void generateGrasses();
 
 }

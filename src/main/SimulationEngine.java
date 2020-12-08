@@ -33,6 +33,7 @@ public class SimulationEngine implements IEngine, ActionListener {
         m.pack();
 
         map1.generateAnimals();
+        map1.generateGrasses();
         //GENERATE GRASS
 
     }
@@ -42,7 +43,6 @@ public class SimulationEngine implements IEngine, ActionListener {
         //TODO
 
         TreeMap<Vector2D, List<Animal>> animals = map1.getAnimals();
-        GrassMap grassMap = map1.getGrassMap();
         System.out.println(map1);
         int ages = 30;
         while(ages-- > 0) {
@@ -106,11 +106,11 @@ public class SimulationEngine implements IEngine, ActionListener {
 
     private void cycle() {
         //map1.deleteDead();
-        map1.rotate();
-        map1.move();
+        //map1.rotate();
+        //map1.move();
         //map1.eat();
         //map1.procreate();
-        //map1.addGrass();
+        map1.addGrass();
         m.repaint();
     }
 

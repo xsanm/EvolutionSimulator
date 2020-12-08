@@ -8,9 +8,9 @@ import static java.lang.Math.round;
 public class WorldMap implements IWorldMap, IPositionChangeObserver {
     protected TreeMap<Vector2D, List<Animal>> animals;
     List<Animal> animalsList;
+    private TreeMap<Vector2D, MapElement> grasses;
     private final int MAP_WIDTH;
     private final int MAP_HEIGHT;
-    private GrassMap grassMap;
     private Vector2D jungleBegin;
     private Vector2D jungleEnd;
     private DataManager dataManager;
@@ -19,7 +19,8 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     public WorldMap(DataManager dataManager, MapPanel mapPanel){
         this.dataManager = dataManager;
-        grassMap = new GrassMap(this, dataManager.mapWidth, dataManager.mapHeight);
+        grasses = new TreeMap<>();
+
         MAP_WIDTH = dataManager.mapWidth;
         MAP_HEIGHT = dataManager.mapHeight;
         this.jungleRatio = dataManager.jungleRatio;
@@ -28,8 +29,26 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         countJungleRanges();
 
         this.mapPanel = mapPanel;
-        this.mapPanel.resizeMap(dataManager.mapWidth, dataManager.mapHeight, this.getJungleBegin(), this.getJungleEnd());
+        this.mapPanel.resizeMap(dataManager.mapHeight, dataManager.mapWidth, this.getJungleBegin(), this.getJungleEnd());
         //System.out.println(this.mapPanel);
+        //System.out.println(dataManager);
+    }
+
+    public void generateGrasses() {
+        int cnt = (int) (0.15 * dataManager.mapWidth * dataManager.mapHeight);
+        List<Vector2D> intList = new ArrayList<>();
+        for(int i = 0; i < dataManager.mapHeight; i++)
+            for(int j = 0; j < dataManager.mapWidth; j++)
+                if(animals.get(new Vector2D(i, j)) == null)
+                    intList.add(new Vector2D(i, j));
+
+        Collections.shuffle(intList);
+        for(int i = 0; i < cnt; ++i) {
+
+            MapElement el = new MapElement(intList.get(i));
+            this.mapPanel.drawGrass(el);
+            grasses.put(el.getPosition(), el);
+        }
     }
 
     public MapPanel getMapPanel() {
@@ -81,8 +100,9 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public String toString() {
-        MapConsoleVisualizer mapa = new MapConsoleVisualizer(this, grassMap);
-        return mapa.draw(new Vector2D(0, 0), new Vector2D(MAP_WIDTH - 1, MAP_WIDTH - 1));
+        //MapConsoleVisualizer mapa = new MapConsoleVisualizer(this, grassMap);
+        //return mapa.draw(new Vector2D(0, 0), new Vector2D(MAP_WIDTH - 1, MAP_WIDTH - 1));
+        return "AMPA";
     }
 
 
@@ -91,9 +111,6 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         return animals;
     }
 
-    public GrassMap getGrassMap() {
-        return grassMap;
-    }
 
     public int getMAP_HEIGHT() {
         return MAP_HEIGHT;
@@ -115,7 +132,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
     public void addRandomAnimal(){
-        Animal animal = new Animal(new Vector2D(generateRandom(0, dataManager.mapWidth - 1), generateRandom(0, dataManager.mapHeight - 1)),
+        Animal animal = new Animal(new Vector2D(generateRandom(0, dataManager.mapHeight - 1), generateRandom(0, dataManager.mapWidth - 1)),
                 new Genotype(), 1, (IPositionChangeObserver) this, dataManager);
         this.place(animal);
         this.animalsList.add(animal);
@@ -163,11 +180,42 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public void addGrass(){
-        this.grassMap.addGrass();
+        List<Vector2D> stepPositions = new ArrayList<>();
+        List<Vector2D> junglePositions = new ArrayList<>();
+        for(int i = 0; i < dataManager.mapHeight; i++)
+            for(int j = 0; j < dataManager.mapWidth; j++) {
+                Vector2D vec = new Vector2D(i, j);
+                if (animals.get(vec) == null && grasses.get(vec) == null) {
+                    if (isInJungle(vec)) {
+                        junglePositions.add(vec);
+                    } else {
+                        stepPositions.add(vec);
+                    }
+                }
+            }
+
+        Collections.shuffle(stepPositions);
+        Collections.shuffle(junglePositions);
+
+        if(!stepPositions.isEmpty()) {
+            MapElement el = new MapElement(stepPositions.get(0));
+            this.mapPanel.drawGrass(el);
+            grasses.put(el.getPosition(), el);
+        }
+        if(!junglePositions.isEmpty()) {
+            MapElement el = new MapElement(junglePositions.get(0));
+            this.mapPanel.drawGrass(el);
+            grasses.put(el.getPosition(), el);
+        }
+
     }
 
     private int generateRandom(int min, int max){
-        return ThreadLocalRandom.current().nextInt(min, max + 1);
+        return ThreadLocalRandom.current().nextInt(min, max);
+    }
+
+    private boolean isInJungle(Vector2D position) {
+        return position.follows(getJungleBegin()) && position.precedes(getJungleEnd());
     }
 
 }

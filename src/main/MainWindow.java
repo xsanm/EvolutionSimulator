@@ -35,7 +35,7 @@ public class MainWindow extends JFrame {
         this.add(map1Panel, BorderLayout.CENTER);
         //this.add(map2Panel, BorderLayout.EAST);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setPreferredSize(new Dimension(1000, 800));
+        this.setPreferredSize(new Dimension(800, 800));
         this.setVisible(true);
         this.pack();
     }
