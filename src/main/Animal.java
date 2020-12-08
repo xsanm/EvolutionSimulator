@@ -18,6 +18,7 @@ public class Animal implements Comparable<Animal>, Drawable {
     private List<IPositionChangeObserver> observers = new ArrayList<>();
     DataManager dataManager;
 
+
     BufferedImage image;
 
 
@@ -116,5 +117,19 @@ public class Animal implements Comparable<Animal>, Drawable {
         AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
         g.drawImage(op.filter(image, null), 0, 0, null);
         //g.fillOval(position.x, position.y, 30, 30);
+    }
+
+    public double getEnergy() {
+        return energy;
+    }
+    public void decreaseEnergy(double e) {
+        this.energy -= e;
+    }
+    public void encreaseEnergy(double e) {
+        this.energy += e;
+    }
+
+    public Genotype getGenotype() {
+        return genotype;
     }
 }

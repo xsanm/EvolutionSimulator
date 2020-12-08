@@ -39,33 +39,6 @@ public class SimulationEngine implements IEngine, ActionListener {
     }
 
 
-    public void run(){
-        //TODO
-
-        TreeMap<Vector2D, List<Animal>> animals = map1.getAnimals();
-        System.out.println(map1);
-        int ages = 30;
-        while(ages-- > 0) {
-
-          for(int i = 0; i < this.animalList.size(); i++) {
-               Animal a = this.animalList.get(i);
-              mapPanel1.eraseAnimal(a);
-               a.move();
-              mapPanel1.drawAnimal(a);
-           }
-
-            System.out.println(map1);
-
-
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e.getActionCommand());
@@ -105,11 +78,11 @@ public class SimulationEngine implements IEngine, ActionListener {
     }
 
     private void cycle() {
-        //map1.deleteDead();
-        //map1.rotate();
-        //map1.move();
-        //map1.eat();
-        //map1.procreate();
+        map1.deleteDead();
+        map1.rotate();
+        map1.move();
+        map1.eat();
+        map1.procreate();
         map1.addGrass();
         m.repaint();
     }

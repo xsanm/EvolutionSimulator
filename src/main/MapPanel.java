@@ -43,6 +43,11 @@ public class MapPanel extends JPanel{
         DrawMap panel = panels[animal.getPosition().x][animal.getPosition().y];
         panel.setDrawable(null);
     }
+    public void eraseGrass(MapElement element){
+        //System.out.println(animal);
+        DrawMap panel = panels[element.getPosition().x][element.getPosition().y];
+        panel.setDrawable(null);
+    }
 
     public void drawGrass(MapElement element){
         //System.out.println(animal);

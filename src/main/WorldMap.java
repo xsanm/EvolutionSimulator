@@ -148,7 +148,16 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public void deleteDead() {
-
+        List<Animal> to_del = new ArrayList<>();
+        for(int i = 0; i < animalsList.size(); i++) {
+            Animal a = animalsList.get(i);
+            if(a.getEnergy() <= 0) {
+                this.mapPanel.eraseAnimal(a);
+                animals.get(a.getPosition()).remove(a);
+                animalsList.remove(i);
+                //to_del.add(a);
+            }
+        }
     }
 
     @Override
@@ -163,6 +172,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         for(Animal a: animalsList) {
             this.mapPanel.eraseAnimal(a);
             a.move();
+            a.decreaseEnergy(dataManager.moveEnergy);
             this.mapPanel.drawAnimal(a);
         }
 
@@ -170,12 +180,58 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public void eat() {
+        //TODO jedza najslisi
+        for(int i = 0; i < dataManager.mapHeight; i++)
+            for(int j = 0; j < dataManager.mapWidth; j++) {
+                Vector2D vec = new Vector2D(i, j);
+                if (animals.get(vec) != null && grasses.get(vec) != null) {
+                    Animal a = animals.get(vec).get(0);
+                    MapElement grass = grasses.get(vec);
+                    a.encreaseEnergy(dataManager.grassEnergy);
+                    this.mapPanel.eraseGrass(grass);
+                    this.grasses.remove(grass.getPosition());
+                }
+            }
 
     }
 
     @Override
     public void procreate() {
+        //TODO romnazaja sie najsilniejsi
+        for(int i = 0; i < dataManager.mapHeight; i++)
+            for(int j = 0; j < dataManager.mapWidth; j++) {
+                Vector2D vec = new Vector2D(i, j);
+                if (animals.get(vec) != null && animals.get(vec).size() > 1) {
+                    Animal a = animals.get(vec).get(0);
+                    Animal b = animals.get(vec).get(1);
+                    a.decreaseEnergy(a.getEnergy() * 0.25);
+                    b.decreaseEnergy(b.getEnergy() * 0.25);
+                    Animal c = new Animal(getPosAround(vec), new Genotype(a.getGenotype().getGenes(), b.getGenotype().getGenes()), a.getEnergy() * 0.25 + b.getEnergy() * 0.25, this, dataManager);
+                    this.animalsList.add(c);
+                    this.place(c);
+                    this.mapPanel.drawAnimal(c);
 
+                }
+            }
+
+
+    }
+
+    private Vector2D getPosAround(Vector2D vec) {
+        //TODO co jesli nie ma wolnego miesjca
+        List<Vector2D> stepPositions = new ArrayList<>();
+
+        for(int i = -1; i <= 1; i++) for(int j = -1; j <= 1; j++) {
+            Vector2D v = new Vector2D(vec.x + i, vec.y + j);
+            if (animals.get(vec) == null) {
+                stepPositions.add(v);
+            }
+        }
+
+
+        Collections.shuffle(stepPositions);
+        if(stepPositions.isEmpty()) return vec;
+        return stepPositions.get(0);
     }
 
     @Override
