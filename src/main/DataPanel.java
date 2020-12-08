@@ -12,6 +12,7 @@ public class DataPanel extends JPanel implements ActionListener {
     private JSpinner widthSpinner;
     private JSpinner heightSpinner;
     private JSpinner animalsNumberSpinner;
+    private JSpinner grassNumberSpinner;
     private JSpinner startEnergySpinner;
     private JSpinner moveEnergySpinner;
     private JSpinner grassEnergySpinner;
@@ -37,7 +38,8 @@ public class DataPanel extends JPanel implements ActionListener {
 
         widthSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 50, 1));
         heightSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 50, 1));
-        animalsNumberSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 50, 1));
+        animalsNumberSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 500, 1));
+        grassNumberSpinner = new JSpinner(new SpinnerNumberModel(30, 0, 1000, 1));
         startEnergySpinner = new JSpinner(new SpinnerNumberModel(2.5, 0, 5.0, 0.1));
         moveEnergySpinner = new JSpinner(new SpinnerNumberModel(0.5, 0, 3.0, 0.1));
         grassEnergySpinner = new JSpinner(new SpinnerNumberModel(1.0, 0, 3.0, 0.1));
@@ -56,57 +58,60 @@ public class DataPanel extends JPanel implements ActionListener {
         addGB(new JLabel("Starting animal number"),  0, 3, 1, 1);
         addGB(animalsNumberSpinner,  1, 3, 1, 1);
 
-        addGB(new JLabel("Starting Energy"),  0, 4, 1, 1);
-        addGB(startEnergySpinner,  1, 4, 1, 1);
+        addGB(new JLabel("Starting grass number"),  0, 4, 1, 1);
+        addGB(grassNumberSpinner,  1, 4, 1, 1);
 
-        addGB(new JLabel("Move Energy"),  0, 5, 1, 1);
-        addGB(moveEnergySpinner,  1, 5, 1, 1);
+        addGB(new JLabel("Starting Energy"),  0, 5, 1, 1);
+        addGB(startEnergySpinner,  1, 5, 1, 1);
 
-        addGB(new JLabel("Grass Energy"),  0, 6, 1, 1);
-        addGB(grassEnergySpinner,  1, 6, 1, 1);
+        addGB(new JLabel("Move Energy"),  0, 6, 1, 1);
+        addGB(moveEnergySpinner,  1, 6, 1, 1);
 
-        addGB(new JLabel("Jungle Ratio"),  0, 7, 1, 1);
-        addGB(jungleRatioSpinner,  1, 7, 1, 1);
+        addGB(new JLabel("Grass Energy"),  0, 7, 1, 1);
+        addGB(grassEnergySpinner,  1, 7, 1, 1);
 
-        addGB(new JLabel("Two Maps"),  0, 8, 1, 1);
-        addGB(twoMapCheckbox,  1, 8, 1, 1);
+        addGB(new JLabel("Jungle Ratio"),  0, 8, 1, 1);
+        addGB(jungleRatioSpinner,  1, 8, 1, 1);
+
+        addGB(new JLabel("Two Maps"),  0, 9, 1, 1);
+        addGB(twoMapCheckbox,  1, 9, 1, 1);
 
 
         JSeparator sep1 = new JSeparator();
-        addGB(sep1,  0, 9, 2, 1);
+        addGB(sep1,  0, 10, 2, 1);
 
         appplyBtn = new JButton("Apply Changes");
         appplyBtn.addActionListener(simulationEngine);
         appplyBtn.addActionListener(this);
-        addGB(appplyBtn,  0, 10, 1, 1);
+        addGB(appplyBtn,  0, 11, 1, 1);
 
         resetBtn = new JButton("Reset Default");
         resetBtn.addActionListener(simulationEngine);
         resetBtn.addActionListener(this);
-        addGB(resetBtn,  1, 10, 1, 1);
+        addGB(resetBtn,  1, 11, 1, 1);
 
         JSeparator sep2 = new JSeparator();
-        addGB(sep2,  0, 11, 2, 1);
+        addGB(sep2,  0, 12, 2, 1);
 
         startBtn = new JButton("START");
         startBtn.addActionListener(simulationEngine);
         //startBtn.addActionListener(this);
-        addGB(startBtn,  0, 12, 1, 1);
+        addGB(startBtn,  0, 13, 1, 1);
 
         stopBtn = new JButton("STOP");
         stopBtn.addActionListener(simulationEngine);
         //stopBtn.addActionListener(this);
-        addGB(stopBtn,  1, 12, 1, 1);
+        addGB(stopBtn,  1, 13, 1, 1);
 
         stepBtn = new JButton("Make Step");
         stepBtn.addActionListener(simulationEngine);
         //appplyBtn.addActionListener(this);
-        addGB(stepBtn,  0, 13, 1, 1);
+        addGB(stepBtn,  0, 14, 1, 1);
 
         saveBtn = new JButton("save");
         saveBtn.addActionListener(simulationEngine);
         //saveBtn.addActionListener(this);
-        addGB(saveBtn,  1, 13, 1, 1);
+        addGB(saveBtn,  1, 14, 1, 1);
 
     }
 
@@ -128,7 +133,6 @@ public class DataPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getActionCommand());
         switch (e.getActionCommand()) {
             case "Apply Changes":
                 applyData();
@@ -140,6 +144,7 @@ public class DataPanel extends JPanel implements ActionListener {
         dataManager.mapWidth = (int) widthSpinner.getValue();
         dataManager.mapHeight = (int) heightSpinner.getValue();
         dataManager.startAnimalNumber = (int) animalsNumberSpinner.getValue();
+        dataManager.startGrassNumber = (int) grassNumberSpinner.getValue();
         dataManager.startEnergy = (double) startEnergySpinner.getValue();
         dataManager.moveEnergy = (double) moveEnergySpinner.getValue();
         dataManager.grassEnergy = (double) grassEnergySpinner.getValue();

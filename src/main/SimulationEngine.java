@@ -15,13 +15,17 @@ public class SimulationEngine implements IEngine, ActionListener {
     MapPanel mapPanel2;
     MainWindow m;
     private boolean SIMULATE;
+    StatPanel statPanel1;
+    StatPanel statPanel2;
 
     public SimulationEngine(){
         SIMULATE = false;
         this.dataManager = new DataManager();
-        mapPanel1 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, new Vector2D(0,0), new Vector2D(0,0));
-        mapPanel2 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, new Vector2D(0,0), new Vector2D(0,0));
-        m = new MainWindow(this, dataManager, mapPanel1, mapPanel2);
+        mapPanel1 = new MapPanel(dataManager, map1);
+        mapPanel2 = new MapPanel(dataManager, map2);
+        statPanel1 = new StatPanel(dataManager);
+        statPanel2 = new StatPanel(dataManager);
+        m = new MainWindow(this, dataManager, mapPanel1, mapPanel2, statPanel1, statPanel2);
 
         initialize();
     }
@@ -30,10 +34,24 @@ public class SimulationEngine implements IEngine, ActionListener {
         this.map1 = new WorldMap(dataManager, mapPanel1);
         this.map2 = new WorldMap(dataManager, mapPanel2);
 
-        m.pack();
 
         map1.generateAnimals();
         map1.generateGrasses();
+        map1.countStats();
+        dataManager.age = 0;
+        statPanel1.refreshStats();
+
+        if(dataManager.twoMaps) {
+            map2.generateAnimals();
+            map2.generateGrasses();
+            map2.countStats();
+            map2.countStats();
+            statPanel2.refreshStats();
+        }
+
+
+
+        m.pack();
         //GENERATE GRASS
 
     }
@@ -70,20 +88,25 @@ public class SimulationEngine implements IEngine, ActionListener {
                 break;
             case "Make Step":
                 SIMULATE = false;
-                cycle();
+                //System.out.println(dataManager);
+                cycle(map1, statPanel1);
+                if(dataManager.twoMaps) cycle(map2, statPanel2);
                 break;
             default:
-                break;
+                System.out.println(e.getActionCommand());
         }
     }
 
-    private void cycle() {
-        map1.deleteDead();
-        map1.rotate();
-        map1.move();
-        map1.eat();
-        map1.procreate();
-        map1.addGrass();
+    private void cycle(IWorldMap map, StatPanel statPanel) {
+
+        map.deleteDead();
+        map.rotate();
+        map.move();
+        map.eat();
+        map.procreate();
+        map.addGrass();
+        map.countStats();
+        statPanel.refreshStats();
         m.repaint();
     }
 
@@ -92,7 +115,8 @@ public class SimulationEngine implements IEngine, ActionListener {
         new Timer(timerDelay, new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 if(!SIMULATE) return;
-                cycle();
+                cycle(map1, statPanel1);
+                if(dataManager.twoMaps) cycle(map2, statPanel2);
             }
         }).start();
 

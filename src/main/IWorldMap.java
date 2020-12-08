@@ -64,4 +64,7 @@ public interface IWorldMap {
 
     public void generateGrasses();
 
+    void countStats();
+
+    void getObjectsAtPosition(Vector2D vec);
 }

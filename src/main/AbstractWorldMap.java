@@ -25,7 +25,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         animals = new TreeMap<>();
         countJungleRanges();
 
-        this.mapPanel = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, getJungleBegin(), getJungleEnd());
+        this.mapPanel = new MapPanel(dataManager, this);
     }
 
     public MapPanel getMapPanel() {

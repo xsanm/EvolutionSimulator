@@ -6,6 +6,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.jar.JarEntry;
 
+import static javax.swing.BoxLayout.Y_AXIS;
+
 public class MainWindow extends JFrame {
 
     private SimulationEngine simulationEngine;
@@ -15,34 +17,53 @@ public class MainWindow extends JFrame {
     MapPanel mapa2;
     JPanel map1Panel;
     JPanel map2Panel;
+    JPanel leftPanel;
+    StatPanel statPanel1;
+    StatPanel statPanel2;
 
-    public MainWindow(SimulationEngine simulationEngine, DataManager dataManager, MapPanel mapa1, MapPanel mapa2) {
+    public MainWindow(SimulationEngine simulationEngine, DataManager dataManager, MapPanel mapa1, MapPanel mapa2, StatPanel statPanel1, StatPanel statPanel2) {
         this.simulationEngine = simulationEngine;
         this.dataManager = dataManager;
         this.mapa1 = mapa1;
         this.mapa2 = mapa2;
+        this.statPanel1 = statPanel1;
+        this.statPanel2 = statPanel2;
+
         dataPanel = new DataPanel(simulationEngine, dataManager);
+
+        leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
+
+        leftPanel.add(dataPanel);
+        leftPanel.add(this.statPanel1);
+
+
 
         map1Panel = new JPanel();
         map1Panel.add(this.mapa1);
 
         map2Panel = new JPanel();
         map2Panel.add(mapa2);
-        //if(dataManager.twoMaps) map2Panel.add(mapa2);
 
         this.setTitle("Evolution Simulator");
-        this.add(dataPanel, BorderLayout.WEST);
+        this.add(leftPanel, BorderLayout.WEST);
         this.add(map1Panel, BorderLayout.CENTER);
-        //this.add(map2Panel, BorderLayout.EAST);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setPreferredSize(new Dimension(800, 800));
+        //this.setPreferredSize(new Dimension(800, 800));
         this.setVisible(true);
         this.pack();
     }
 
     public void steerSecondMap(boolean is){
-        if(is) this.add(map2Panel, BorderLayout.EAST);
-        else this.remove(map2Panel);
+        if(is) {
+            leftPanel.add(this.statPanel2);
+            this.add(map2Panel, BorderLayout.EAST);
+        } else {
+            leftPanel.remove(this.statPanel2);
+            this.remove(map2Panel);
+        }
+
+
     }
 
 }

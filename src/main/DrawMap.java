@@ -1,10 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class DrawMap  extends JPanel {
+public class DrawMap  extends JButton {
     private Drawable drawable;
 
     public DrawMap() {}
+    public DrawMap(String s) {super(s);}
 
     public DrawMap(Drawable drawable) {
         this.drawable = drawable;

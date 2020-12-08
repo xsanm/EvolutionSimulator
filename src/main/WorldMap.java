@@ -29,13 +29,13 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         countJungleRanges();
 
         this.mapPanel = mapPanel;
-        this.mapPanel.resizeMap(dataManager.mapHeight, dataManager.mapWidth, this.getJungleBegin(), this.getJungleEnd());
+        this.mapPanel.resizeMap(dataManager, this);
         //System.out.println(this.mapPanel);
         //System.out.println(dataManager);
     }
 
     public void generateGrasses() {
-        int cnt = (int) (0.15 * dataManager.mapWidth * dataManager.mapHeight);
+        int cnt = (int) (dataManager.startGrassNumber);
         List<Vector2D> intList = new ArrayList<>();
         for(int i = 0; i < dataManager.mapHeight; i++)
             for(int j = 0; j < dataManager.mapWidth; j++)
@@ -49,6 +49,19 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
             this.mapPanel.drawGrass(el);
             grasses.put(el.getPosition(), el);
         }
+    }
+
+    @Override
+    public void countStats() {
+        dataManager.animals = animalsList.size();
+        dataManager.grasses = grasses.size();
+        dataManager.age += 1;
+    }
+
+    @Override
+    public void getObjectsAtPosition(Vector2D vec) {
+        System.out.println(animals.get(vec));
+        System.out.println(grasses.get(vec));
     }
 
     public MapPanel getMapPanel() {
@@ -154,7 +167,10 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
             if(a.getEnergy() <= 0) {
                 this.mapPanel.eraseAnimal(a);
                 animals.get(a.getPosition()).remove(a);
-                animalsList.remove(i);
+                if( animals.get(a.getPosition()).isEmpty()) {
+                    animals.remove(a.getPosition());
+                }
+                animalsList.remove(a);
                 //to_del.add(a);
             }
         }
@@ -184,7 +200,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         for(int i = 0; i < dataManager.mapHeight; i++)
             for(int j = 0; j < dataManager.mapWidth; j++) {
                 Vector2D vec = new Vector2D(i, j);
-                if (animals.get(vec) != null && grasses.get(vec) != null) {
+                if (animals.get(vec) != null && !animals.get(vec).isEmpty() && grasses.get(vec) != null) {
                     Animal a = animals.get(vec).get(0);
                     MapElement grass = grasses.get(vec);
                     a.encreaseEnergy(dataManager.grassEnergy);
@@ -223,7 +239,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
         for(int i = -1; i <= 1; i++) for(int j = -1; j <= 1; j++) {
             Vector2D v = new Vector2D(vec.x + i, vec.y + j);
-            if (animals.get(vec) == null) {
+            if (animals.get(vec) == null || animals.get(vec).isEmpty()) {
                 stepPositions.add(v);
             }
         }
@@ -241,7 +257,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         for(int i = 0; i < dataManager.mapHeight; i++)
             for(int j = 0; j < dataManager.mapWidth; j++) {
                 Vector2D vec = new Vector2D(i, j);
-                if (animals.get(vec) == null && grasses.get(vec) == null) {
+                if ((animals.get(vec) == null || animals.get(vec).isEmpty()) && grasses.get(vec) == null) {
                     if (isInJungle(vec)) {
                         junglePositions.add(vec);
                     } else {
@@ -257,6 +273,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
             MapElement el = new MapElement(stepPositions.get(0));
             this.mapPanel.drawGrass(el);
             grasses.put(el.getPosition(), el);
+            //System.out.println("dodaje trawe");
         }
         if(!junglePositions.isEmpty()) {
             MapElement el = new MapElement(junglePositions.get(0));
