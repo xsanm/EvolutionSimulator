@@ -49,4 +49,19 @@ public interface IWorldMap {
     public Vector2D getJungleEnd();
 
     void addRandomAnimal();
+    public MapPanel getMapPanel();
+    public void generateAnimals();
+
+    public void deleteDead();
+
+    public void rotate() ;
+
+    public void move() ;
+
+    public void eat() ;
+
+    public void procreate() ;
+
+    public void addGrass() ;
+
 }

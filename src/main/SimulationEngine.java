@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -6,86 +7,55 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine implements IEngine, ActionListener {
-    private IWorldMap map;
+    private IWorldMap map1;
+    private IWorldMap map2;
     DataManager dataManager;
     List<Animal> animalList;
-    MapPanel mapa1;
-    MapPanel mapa2;
+    MapPanel mapPanel1;
+    MapPanel mapPanel2;
     MainWindow m;
+    private boolean SIMULATE;
 
     public SimulationEngine(){
+        SIMULATE = false;
         this.dataManager = new DataManager();
-        this.map = new WorldMap(dataManager);
-        //m = new MainWindow(this, dataManager, mapa1, mapa2);
-        this.mapa1 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
-        this.mapa2 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
-        m = new MainWindow(this, dataManager, mapa1, mapa2);
+        mapPanel1 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, new Vector2D(0,0), new Vector2D(0,0));
+        mapPanel2 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, new Vector2D(0,0), new Vector2D(0,0));
+        m = new MainWindow(this, dataManager, mapPanel1, mapPanel2);
 
         initialize();
     }
     public void initialize() {
-        this.map = new WorldMap(dataManager);
-        for(int i = 0; i < dataManager.startAnimalNumber; i++){
-            map.addRandomAnimal();
-        }
 
+        this.map1 = new WorldMap(dataManager, mapPanel1);
+        this.map2 = new WorldMap(dataManager, mapPanel2);
 
-        animalList = new ArrayList<>();
-        //TODO
-        TreeMap<Vector2D, List<Animal>> animals = map.getAnimals();
-        for (int i = 0; i < map.getMAP_HEIGHT(); i++) {
-            for (int j = 0; j < map.getMAP_WIDTH(); j++) {
-                if (animals.get(new Vector2D(i, j)) != null) {
-                    List<Animal> anims = animals.get(new Vector2D(i, j));
-                    //Iterator value = anims.iterator();
-                    for (int k = 0; k < anims.size(); k++) {
-                        //anims.get(i).move();
-                        animalList.add(anims.get(k));
-                        //System.out.print(anims.get(i) + " ");
-                    }
-                }
-            }
-        }
-        for(int i = 0; i < this.animalList.size(); i++) {
-            mapa1.drawAnimal(animalList.get(i));
-        }
-        //run();
+        m.pack();
+
+        map1.generateAnimals();
+        //GENERATE GRASS
+
     }
 
 
     public void run(){
         //TODO
 
-        TreeMap<Vector2D, List<Animal>> animals = map.getAnimals();
-        GrassMap grassMap = map.getGrassMap();
-        System.out.println(map);
+        TreeMap<Vector2D, List<Animal>> animals = map1.getAnimals();
+        GrassMap grassMap = map1.getGrassMap();
+        System.out.println(map1);
         int ages = 30;
         while(ages-- > 0) {
 
           for(int i = 0; i < this.animalList.size(); i++) {
                Animal a = this.animalList.get(i);
-               mapa1.eraseAnimal(a);
+              mapPanel1.eraseAnimal(a);
                a.move();
-               mapa1.drawAnimal(a);
+              mapPanel1.drawAnimal(a);
            }
 
-            System.out.println(map);
+            System.out.println(map1);
 
-
-
-/*            for (int i = 0; i < zoo.height; i++) {
-                for (int j = 0; j < zoo.width; j++) {
-
-                    if (animals.get(new Vector2D(i, j)) != null) {
-                        zoo.drawAnimal(new Vector2D(i, j), String.valueOf(animals.get(new Vector2D(i, j)).size()));
-                    } else if (grassMap.objectAt(new Vector2D(i, j)) != null) {
-                        zoo.drawAnimal(new Vector2D(i, j), "*");
-                    } else {
-                        zoo.drawAnimal(new Vector2D(i, j), "");
-
-                    }
-                }
-            }*/
 
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -93,16 +63,7 @@ public class SimulationEngine implements IEngine, ActionListener {
                 e.printStackTrace();
             }
         }
-        //zoo.drawAnimal(ani
-        /*for (int i = 0; i < directions.length; i++) {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            animals.get(i % animals.size()).move(this.directions[i]);
-            zoo.drawAnimal(animals);
-        }*/
+
     }
 
     @Override
@@ -111,8 +72,8 @@ public class SimulationEngine implements IEngine, ActionListener {
         switch (e.getActionCommand()) {
             case "Apply Changes":
 
-                mapa1.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
-                mapa2.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
+                //mapa1.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
+                //mapa2.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
                 m.steerSecondMap(dataManager.twoMaps);
                 initialize();
                 m.pack();
@@ -121,14 +82,47 @@ public class SimulationEngine implements IEngine, ActionListener {
             case "Reset Default":
                 dataManager.resetData();
 
-                mapa1.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
-                mapa2.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
+                //mapa1.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
+                //mapa2.resizeMap(dataManager.mapWidth, dataManager.mapHeight, map.getJungleBegin(), map.getJungleEnd());
                 m.steerSecondMap(dataManager.twoMaps);
                 initialize();
                 m.pack();
+                break;
+            case "START":
+                SIMULATE = true;
+                startSimulationCycle();
+                break;
+            case "STOP":
+                SIMULATE = false;
+                break;
+            case "Make Step":
+                SIMULATE = false;
+                cycle();
+                break;
             default:
                 break;
         }
+    }
+
+    private void cycle() {
+        //map1.deleteDead();
+        map1.rotate();
+        map1.move();
+        //map1.eat();
+        //map1.procreate();
+        //map1.addGrass();
+        m.repaint();
+    }
+
+    private void startSimulationCycle() {
+        int timerDelay = 1000;
+        new Timer(timerDelay, new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                if(!SIMULATE) return;
+                cycle();
+            }
+        }).start();
+
     }
 
     private int generateRandom(int min, int max){
@@ -138,41 +132,17 @@ public class SimulationEngine implements IEngine, ActionListener {
 
 
     public void runSimulation() {
-        //DataManager dataManager = new DataManager();
-
         System.out.println("Hello");
 
         Genotype g1 = new Genotype();
         Genotype g2 = new Genotype();
         Genotype g3 = new Genotype(g1.getGenes(), g2.getGenes());
-        System.out.println(g1);
-        System.out.println(g2);
-        System.out.println(g3);
+        //System.out.println(g1);
+        //System.out.println(g2);
+        //System.out.println(g3);
         //for(int i = 0; i < 10; i++) System.out.println(g3.getRandomGene());
 
 
-        //WorldMap mapa = new WorldMap(5, 5);
-        //map.place(new Animal(new Vector2D(2, 3), g1, 1, (IPositionChangeObserver) map));
-        ///map.place(new Animal(new Vector2D(1, 1), g1, 2, (IPositionChangeObserver) map));
-        //map.place(new Animal(new Vector2D(1, 1), g1, 3, (IPositionChangeObserver) map));
-        //map.addGrass();
-        //System.out.println(map.objectAt(new Vector2D(1, 1)).get(0));
-        //System.out.println(mapa);
-
-
-        //MapPanel mapa1 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight);
-        //MapPanel mapa2 = new MapPanel(dataManager.mapWidth, dataManager.mapHeight);
-
-
-
-        //DrawAnimalsOld zoo = new DrawAnimalsOld(5, 5);
-
-        //SimulationEngine simulationEngine = new SimulationEngine(map, dataManager, mapa1, mapa2);
-        //SimulationEngine simulationEngine = new SimulationEngine(mapa);
-        //simulationEngine.run(zoo);
-
-
-        //MainWindow m = new MainWindow(this, dataManager, mapa1, mapa2);
         m.setVisible(true);
 
     }

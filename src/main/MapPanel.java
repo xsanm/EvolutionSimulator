@@ -6,13 +6,14 @@ public class MapPanel extends JPanel{
     private DrawMap[][] panels;
 
     public MapPanel(int rows, int cols, Vector2D begin, Vector2D end){
+        panels = new DrawMap[rows][cols];
         resizeMap(rows, cols, begin, end);
     }
 
     public void resizeMap(int rows, int cols, Vector2D begin, Vector2D end){
 
-        System.out.println(begin);
-        System.out.println(end);
+        //System.out.println(begin);
+        //System.out.println(end);
         MapPanel.this.removeAll();
 
         setLayout(new GridLayout(rows, cols));
@@ -32,12 +33,12 @@ public class MapPanel extends JPanel{
     }
 
     public void drawAnimal(Animal animal){
-        System.out.println(animal);
+        //System.out.println(animal);
         DrawMap panel = panels[animal.getPosition().x][animal.getPosition().y];
         panel.setDrawable(animal);
     }
     public void eraseAnimal(Animal animal){
-        System.out.println(animal);
+        //System.out.println(animal);
         DrawMap panel = panels[animal.getPosition().x][animal.getPosition().y];
         panel.setDrawable(null);
     }

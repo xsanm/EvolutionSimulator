@@ -6,7 +6,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.jar.JarEntry;
 
-public class MainWindow extends JFrame implements ComponentListener {
+public class MainWindow extends JFrame {
 
     private SimulationEngine simulationEngine;
     DataManager dataManager;
@@ -45,28 +45,4 @@ public class MainWindow extends JFrame implements ComponentListener {
         else this.remove(map2Panel);
     }
 
-
-    @Override
-    public void componentResized(ComponentEvent e) {
-        int W = 1;
-        int H = 1;
-        Rectangle b = e.getComponent().getBounds();
-        e.getComponent().setBounds(b.x, b.y, b.width, b.width*H/W);
-
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent e) {
-
-    }
-
-    @Override
-    public void componentShown(ComponentEvent e) {
-
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent e) {
-
-    }
 }

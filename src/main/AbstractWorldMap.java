@@ -14,6 +14,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     private Vector2D jungleEnd;
     private DataManager dataManager;
     double jungleRatio;
+    MapPanel mapPanel;
 
     public AbstractWorldMap(DataManager dataManager){
         this.dataManager = dataManager;
@@ -23,6 +24,12 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         this.jungleRatio = dataManager.jungleRatio;
         animals = new TreeMap<>();
         countJungleRanges();
+
+        this.mapPanel = new MapPanel(dataManager.mapWidth, dataManager.mapHeight, getJungleBegin(), getJungleEnd());
+    }
+
+    public MapPanel getMapPanel() {
+        return mapPanel;
     }
 
     private void countJungleRanges() {
@@ -108,7 +115,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public void addRandomAnimal(){
         this.place(
                 new Animal(new Vector2D(generateRandom(0, dataManager.mapWidth), generateRandom(0, dataManager.mapHeight)),
-                        new Genotype(), 1, (IPositionChangeObserver) this));
+                        new Genotype(), 1, (IPositionChangeObserver) this, dataManager));
     }
 
     private int generateRandom(int min, int max){
