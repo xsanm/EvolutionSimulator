@@ -1,5 +1,7 @@
 import javax.swing.*;
 import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -17,6 +19,10 @@ public class SimulationEngine implements IEngine, ActionListener {
     private boolean SIMULATE;
     StatPanel statPanel1;
     StatPanel statPanel2;
+    private static final int min_ms = 0;
+    private static final int max_ms = 3000;
+
+    private Timer stepTimer;
 
     public SimulationEngine(){
         SIMULATE = false;
@@ -25,6 +31,7 @@ public class SimulationEngine implements IEngine, ActionListener {
         mapPanel2 = new MapPanel(dataManager, map2);
         statPanel1 = new StatPanel(dataManager);
         statPanel2 = new StatPanel(dataManager);
+
         m = new MainWindow(this, dataManager, mapPanel1, mapPanel2, statPanel1, statPanel2);
 
         initialize();
@@ -80,11 +87,18 @@ public class SimulationEngine implements IEngine, ActionListener {
                 m.pack();
                 break;
             case "START":
+                stepTimer = new Timer(dataManager.duration, this::stepButtonAction);
+                stepTimer.start();
+                //stepTimer.start();
                 SIMULATE = true;
-                startSimulationCycle();
+                //startSimulationCycle();
                 break;
             case "STOP":
                 SIMULATE = false;
+                if(stepTimer != null){
+                    stepTimer.stop();
+                    stepTimer = null;
+                }
                 break;
             case "Make Step":
                 SIMULATE = false;
@@ -93,7 +107,17 @@ public class SimulationEngine implements IEngine, ActionListener {
                 if(dataManager.twoMaps) cycle(map2, statPanel2);
                 break;
             default:
-                System.out.println(e.getActionCommand());
+                System.out.println("dgfhdfh");
+        }
+    }
+
+    private void stepButtonAction(ActionEvent e){
+        cycle(map1, statPanel1);
+    }
+
+    public void speedChanged(){
+        if(stepTimer != null && stepTimer.isRunning()){
+            this.stepTimer.setDelay(dataManager.duration);
         }
     }
 
@@ -110,17 +134,23 @@ public class SimulationEngine implements IEngine, ActionListener {
         m.repaint();
     }
 
-    private void startSimulationCycle() {
-        int timerDelay = 1000;
-        new Timer(timerDelay, new ActionListener(){
+    /*private void startSimulationCycle() {
+        int timerDelay = 500;
+        new Timer(dataManager.duration, new ActionListener(){
+
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if(!SIMULATE) return;
                 cycle(map1, statPanel1);
                 if(dataManager.twoMaps) cycle(map2, statPanel2);
+                System.out.println(dataManager.duration);
+                System.out.println( ((Timer) e.getSource()).getDelay());
+                ((Timer) e.getSource()).setDelay(dataManager.duration);
+                ((Timer) e.getSource()).restart();
             }
         }).start();
 
-    }
+    }*/
 
     private int generateRandom(int min, int max){
         return ThreadLocalRandom.current().nextInt(min, max + 1);
@@ -143,4 +173,5 @@ public class SimulationEngine implements IEngine, ActionListener {
         m.setVisible(true);
 
     }
+
 }

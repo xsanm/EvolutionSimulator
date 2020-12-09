@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DataManager{
+    public int duration;
     int startGrassNumber;
     int age;
     int grasses;
@@ -22,16 +23,17 @@ public class DataManager{
     public void resetData(){
         mapWidth = 10;
         mapHeight = 10;
-        startAnimalNumber = 5;
+        startAnimalNumber = 15;
         startEnergy = 2.5;
-        moveEnergy = 1.5;
+        moveEnergy = 0.1;
         grassEnergy = 1.0;
         jungleRatio = 0.5;
         twoMaps = false;
         animals = 0;
         grasses = 0;
         age = 0;
-        startGrassNumber = 20;
+        startGrassNumber = 30;
+        duration = 1000;
     }
 
     @Override

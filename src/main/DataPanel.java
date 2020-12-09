@@ -1,5 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +26,7 @@ public class DataPanel extends JPanel implements ActionListener {
     JButton stopBtn;
     JButton stepBtn;
     JButton saveBtn;
+    JSlider durationSilder;
 
 
     public DataPanel(SimulationEngine simulationEngine, DataManager dataManager){
@@ -36,13 +39,13 @@ public class DataPanel extends JPanel implements ActionListener {
         this.setLayout(new GridBagLayout());
         this.setPreferredSize(new Dimension(250, 500));
 
-        widthSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 50, 1));
-        heightSpinner = new JSpinner(new SpinnerNumberModel(10, 0, 50, 1));
-        animalsNumberSpinner = new JSpinner(new SpinnerNumberModel(5, 0, 500, 1));
+        widthSpinner = new JSpinner(new SpinnerNumberModel(10, 3, 50, 1));
+        heightSpinner = new JSpinner(new SpinnerNumberModel(10, 3, 50, 1));
+        animalsNumberSpinner = new JSpinner(new SpinnerNumberModel(15, 0, 1000, 1));
         grassNumberSpinner = new JSpinner(new SpinnerNumberModel(30, 0, 1000, 1));
         startEnergySpinner = new JSpinner(new SpinnerNumberModel(2.5, 0, 5.0, 0.1));
-        moveEnergySpinner = new JSpinner(new SpinnerNumberModel(0.5, 0, 3.0, 0.1));
-        grassEnergySpinner = new JSpinner(new SpinnerNumberModel(1.0, 0, 3.0, 0.1));
+        moveEnergySpinner = new JSpinner(new SpinnerNumberModel(0.1, 0, 5.0, 0.1));
+        grassEnergySpinner = new JSpinner(new SpinnerNumberModel(1.0, 0, 5.0, 0.1));
         jungleRatioSpinner = new JSpinner(new SpinnerNumberModel(0.50, 0, 1.0, 0.1));
         twoMapCheckbox = new JCheckBox();
 
@@ -113,7 +116,24 @@ public class DataPanel extends JPanel implements ActionListener {
         //saveBtn.addActionListener(this);
         addGB(saveBtn,  1, 14, 1, 1);
 
+        addGB(new Label("Set gap between ages [ms]"),  0, 15, 2, 1);
+
+        durationSilder = new JSlider(0, 2000, 1000);
+        durationSilder.setPaintTrack(true);
+        durationSilder.setPaintTicks(true);
+        durationSilder.setPaintLabels(true);
+        durationSilder.setMajorTickSpacing(500);
+        durationSilder.setMinorTickSpacing(100);
+        durationSilder.addChangeListener(this::speedChanged);
+        addGB(durationSilder,  0, 16, 2, 1);
+
     }
+
+    public void speedChanged(ChangeEvent e){
+        dataManager.duration = durationSilder.getValue();
+        simulationEngine.speedChanged();
+    }
+
 
     void addGB(Component component, int x, int y, int w, int h) {
         constraints.gridx = x;
@@ -137,6 +157,20 @@ public class DataPanel extends JPanel implements ActionListener {
             case "Apply Changes":
                 applyData();
                 break;
+            case "START":
+                startBtn.setEnabled(false);
+                appplyBtn.setEnabled(false);
+                resetBtn.setEnabled(false);
+                this.repaint();
+                break;
+            case "STOP":
+                startBtn.setEnabled(true);
+                break;
+            case "Make Step":
+
+                break;
+            default:
+                System.out.println("dgfhdfh");
         }
     }
 
