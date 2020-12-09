@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -62,6 +63,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     public void getObjectsAtPosition(Vector2D vec) {
         System.out.println(animals.get(vec));
         System.out.println(grasses.get(vec));
+        //JDialog d = new JDialog(m, "dialog Box");
     }
 
     public MapPanel getMapPanel() {

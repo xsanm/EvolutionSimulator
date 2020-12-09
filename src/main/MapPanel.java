@@ -3,12 +3,14 @@ import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class MapPanel extends JPanel implements ActionListener {
 
     private DrawMap[][] panels;
     private DataManager dataManager;
     private IWorldMap mapa;
+    MainWindow mainWindow;
 
     public MapPanel(DataManager dataManager, IWorldMap mapa) {
         this.dataManager = dataManager;
@@ -84,6 +86,9 @@ public class MapPanel extends JPanel implements ActionListener {
         panel.setDrawable(new Animal(new Vector2D(2, 3)));
     }
 
+    public void setMainWindow(MainWindow mainWindow) {
+        this.mainWindow = mainWindow;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -94,5 +99,25 @@ public class MapPanel extends JPanel implements ActionListener {
         mapa.getObjectsAtPosition(vec);
         //e.getSource();
         //System.out.println(e.getSource());
+        JPanel dialogPanel = new JPanel();
+        dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.PAGE_AXIS));
+        dialogPanel.add(new JLabel("Postion: " + vec ));
+
+        List<Animal> animals = mapa.objectAt(vec);
+        if(animals != null) {
+            dialogPanel.add(new JLabel("Animals:"));
+            for (Animal a : animals) {
+                dialogPanel.add(new JLabel("Animal energy: " + a.getEnergy() + ", genotype: " + a.getGenotype()));
+            }
+        } else {
+            dialogPanel.add(new JLabel("Animals: NONE"));
+        }
+
+        JDialog d = new JDialog(mainWindow, "dialog Box");
+        d.add(dialogPanel);
+        //d.setLocationRelativeTo(null);
+        d.pack();
+        d.setVisible(true);
+        d.setLocation(100, 100);
     }
 }

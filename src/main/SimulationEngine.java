@@ -87,9 +87,8 @@ public class SimulationEngine implements IEngine, ActionListener {
                 m.pack();
                 break;
             case "START":
-                stepTimer = new Timer(dataManager.duration, this::stepButtonAction);
+                stepTimer = new Timer(dataManager.duration, this::startEngine);
                 stepTimer.start();
-                //stepTimer.start();
                 SIMULATE = true;
                 //startSimulationCycle();
                 break;
@@ -111,8 +110,9 @@ public class SimulationEngine implements IEngine, ActionListener {
         }
     }
 
-    private void stepButtonAction(ActionEvent e){
+    private void startEngine(ActionEvent e){
         cycle(map1, statPanel1);
+        if(dataManager.twoMaps) cycle(map2, statPanel2);
     }
 
     public void speedChanged(){
