@@ -19,8 +19,9 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     MapPanel mapPanel;
     int sumOFDeadYears = 0;
     int sumOfDead = 0;
+    private StatManager statManager;
 
-    public WorldMap(DataManager dataManager, MapPanel mapPanel){
+    public WorldMap(DataManager dataManager, MapPanel mapPanel, StatManager statManager){
         this.dataManager = dataManager;
         grasses = new TreeMap<>();
 
@@ -30,7 +31,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         animals = new TreeMap<>();
         animalsList = new ArrayList<>();
         countJungleRanges();
-
+        this.statManager = statManager;
         this.mapPanel = mapPanel;
         this.mapPanel.resizeMap(dataManager, this);
         //System.out.println(this.mapPanel);
@@ -56,18 +57,26 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public void countStats() {
-        dataManager.animals = animalsList.size();
-        dataManager.grasses = grasses.size();
-        dataManager.age += 1;
-        dataManager.averageEnergy = this.getAverageEnergy();
-        dataManager.averageLife = this.getAverageLife();
-        dataManager.averageChildren = this.getAverageChildren();
-        dataManager.dominatingGenotype = this.getDominatingGenotype();
+
+        statManager.setAges(statManager.getAges() + 1);
+        statManager.setAnimals( animalsList.size());
+        statManager.setGrasses(grasses.size());
+        statManager.setAverageEnergy(this.getAverageEnergy());
+        statManager.setAverageChildren(this.getAverageChildren());
+        statManager.setAverageLife(this.getAverageLife());
+        statManager.setDominatingGene(this.getDominatingGenotype());
+        //dataManager.animals = animalsList.size();
+        //dataManager.grasses = grasses.size();
+       // dataManager.age += 1;
+        //dataManager.averageEnergy = this.getAverageEnergy();
+        //dataManager.averageLife = this.getAverageLife();
+        //dataManager.averageChildren = this.getAverageChildren();
+        //dataManager.dominatingGenotype = this.getDominatingGenotype();
     }
 
-    private Genotype getDominatingGenotype() {
+    private int getDominatingGenotype() {
         //TODO
-        return new Genotype();
+        return 1;
     }
 
     private double getAverageChildren() {

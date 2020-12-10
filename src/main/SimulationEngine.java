@@ -20,6 +20,9 @@ public class SimulationEngine implements IEngine, ActionListener {
     private boolean SIMULATE2;
     StatPanel statPanel1;
     StatPanel statPanel2;
+    StatManager statManager1;
+    StatManager statManager2;
+
 
     private Timer stepTimer;
 
@@ -31,23 +34,28 @@ public class SimulationEngine implements IEngine, ActionListener {
         stepTimer = new Timer(dataManager.duration, this::startEngine);
         mapPanel1 = new MapPanel(dataManager, map1);
         mapPanel2 = new MapPanel(dataManager, map2);
-        statPanel1 = new StatPanel(dataManager);
-        statPanel2 = new StatPanel(dataManager);
+        statManager1 = new StatManager();
+        statManager2 = new StatManager();
+        statPanel1 = new StatPanel(statManager1);
+        statPanel2 = new StatPanel(statManager2);
+
 
         m = new MainWindow(this, dataManager, mapPanel1, mapPanel2, statPanel1, statPanel2);
 
         initialize();
     }
     public void initialize() {
+        statManager1.resetStats();
+        statManager2.resetStats();
 
-        this.map1 = new WorldMap(dataManager, mapPanel1);
-        this.map2 = new WorldMap(dataManager, mapPanel2);
+
+        this.map1 = new WorldMap(dataManager, mapPanel1, statManager1);
+        this.map2 = new WorldMap(dataManager, mapPanel2, statManager2);
 
 
         map1.generateAnimals();
         map1.generateGrasses();
         map1.countStats();
-        dataManager.age = 0;
         statPanel1.refreshStats();
 
         if(dataManager.twoMaps) {

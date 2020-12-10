@@ -2,14 +2,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DataManager{
-    public int duration;
-    public double averageEnergy;
-    public double averageLife;
-    public double averageChildren;
-    public Genotype dominatingGenotype = new Genotype();
+    int duration;
     int startGrassNumber;
-    int age;
-    int grasses;
+
     int mapWidth;
     int mapHeight;
     int startAnimalNumber;
@@ -18,7 +13,7 @@ public class DataManager{
     double grassEnergy;
     double jungleRatio;
     boolean twoMaps;
-    int animals;
+
 
     public DataManager(){
         resetData();
@@ -33,9 +28,6 @@ public class DataManager{
         grassEnergy = 1.0;
         jungleRatio = 0.5;
         twoMaps = false;
-        animals = 0;
-        grasses = 0;
-        age = 0;
         startGrassNumber = 30;
         duration = 1000;
     }
@@ -51,7 +43,6 @@ public class DataManager{
                 ", grassEnergy=" + grassEnergy +
                 ", jungleRatio=" + jungleRatio +
                 ", twoMaps=" + twoMaps +
-                ", animals=" + animals +
                 '}';
     }
 }
