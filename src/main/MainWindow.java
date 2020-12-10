@@ -64,6 +64,7 @@ public class MainWindow extends JFrame {
             leftPanel.add(new Label("Map 2 Stats"));
             leftPanel.add(this.statPanel2);
             this.add(map2Panel, BorderLayout.EAST);
+            this.pack();
         } else {
             leftPanel.remove(statPanel2);
             this.remove(map2Panel);

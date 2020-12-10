@@ -17,6 +17,8 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     private DataManager dataManager;
     double jungleRatio;
     MapPanel mapPanel;
+    int sumOFDeadYears = 0;
+    int sumOfDead = 0;
 
     public WorldMap(DataManager dataManager, MapPanel mapPanel){
         this.dataManager = dataManager;
@@ -58,8 +60,29 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         dataManager.grasses = grasses.size();
         dataManager.age += 1;
         dataManager.averageEnergy = this.getAverageEnergy();
+        dataManager.averageLife = this.getAverageLife();
+        dataManager.averageChildren = this.getAverageChildren();
+        dataManager.dominatingGenotype = this.getDominatingGenotype();
+    }
 
+    private Genotype getDominatingGenotype() {
+        //TODO
+        return new Genotype();
+    }
 
+    private double getAverageChildren() {
+        double sum = 0.0;
+
+        for(Animal a: animalsList) {
+            sum += a.getChildren();
+        }
+        if(animalsList.isEmpty()) return 0.0;
+        return sum / animalsList.size();
+    }
+
+    private double getAverageLife() {
+        if(sumOfDead == 0) return 0.0;
+        return sumOFDeadYears / sumOfDead;
     }
 
     private double getAverageEnergy() {
@@ -181,6 +204,8 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         for(int i = 0; i < animalsList.size(); i++) {
             Animal a = animalsList.get(i);
             if(a.getEnergy() <= 0) {
+                sumOfDead++;
+                sumOFDeadYears += a.getYears();
                 this.mapPanel.eraseAnimal(a);
                 animals.get(a.getPosition()).remove(a);
                 if( animals.get(a.getPosition()).isEmpty()) {
@@ -259,6 +284,9 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
                     if(a.getEnergy() / dataManager.startEnergy < 0.5) continue;
                     if(b.getEnergy() / dataManager.startEnergy < 0.5) continue;
+
+                    a.setChildren(a.getChildren() + 1);
+                    b.setChildren(b.getChildren() + 1);
 
                     a.decreaseEnergy(a.getEnergy() * 0.25);
                     b.decreaseEnergy(b.getEnergy() * 0.25);

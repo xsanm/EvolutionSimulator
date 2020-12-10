@@ -19,6 +19,8 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
     private double energy;
     private List<IPositionChangeObserver> observers = new ArrayList<>();
     DataManager dataManager;
+    private int years;
+    private int children;
 
 
     BufferedImage image;
@@ -42,11 +44,21 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
         this.energy = energy;
         observers.add(obs);
         this.dataManager = dataManager;
+        years = 0;
+        children = 0;
         try {
             image = ImageIO.read(new File("C:\\Users\\xsan\\Desktop\\arr3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setChildren(int children) {
+        this.children = children;
+    }
+
+    public int getChildren() {
+        return children;
     }
 
     public Animal(Vector2D vector2D) {
@@ -57,9 +69,13 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
         this.orientation = genotype.getRandomGene();
     }
 
+    public int getYears() {
+        return years;
+    }
+
     public void move() {
 
-
+        years++;
         Vector2D oldPosition = this.position;
         //TODO
         Vector2D moveVector = genotype.genToUnitVector(this.orientation).add(this.position).add(new Vector2D(dataManager.mapWidth, dataManager.mapWidth));

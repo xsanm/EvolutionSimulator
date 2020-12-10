@@ -4,6 +4,9 @@ import java.awt.event.ActionListener;
 public class DataManager{
     public int duration;
     public double averageEnergy;
+    public double averageLife;
+    public double averageChildren;
+    public Genotype dominatingGenotype = new Genotype();
     int startGrassNumber;
     int age;
     int grasses;
