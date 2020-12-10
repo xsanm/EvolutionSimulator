@@ -11,6 +11,10 @@ public class MapPanel extends JPanel implements ActionListener {
     private DataManager dataManager;
     private IWorldMap mapa;
     MainWindow mainWindow;
+    List<Animal> animals;
+    JDialog following;
+    Animal animalToFollow;
+
 
     public MapPanel(DataManager dataManager, IWorldMap mapa) {
         this.dataManager = dataManager;
@@ -58,6 +62,7 @@ public class MapPanel extends JPanel implements ActionListener {
         int y = dataManager.mapHeight - 1 - animal.getPosition().y;
         DrawMap panel = panels[y][animal.getPosition().x];
         panel.setDrawable(animal);
+        if(animal == animalToFollow) refreshFollowing();
     }
 
     public void eraseAnimal(Animal animal){
@@ -65,6 +70,7 @@ public class MapPanel extends JPanel implements ActionListener {
         int y = dataManager.mapHeight - 1 - animal.getPosition().y;
         DrawMap panel = panels[y][animal.getPosition().x];
         panel.setDrawable(null);
+        if(animal == animalToFollow) refreshFollowing();
     }
     public void eraseGrass(MapElement element){
         //System.out.println(animal);
@@ -103,21 +109,53 @@ public class MapPanel extends JPanel implements ActionListener {
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.PAGE_AXIS));
         dialogPanel.add(new JLabel("Postion: " + vec ));
 
-        List<Animal> animals = mapa.objectAt(vec);
+        animals = mapa.objectAt(vec);
+        int id = 1;
         if(animals != null) {
             dialogPanel.add(new JLabel("Animals:"));
             for (Animal a : animals) {
                 dialogPanel.add(new JLabel("Animal energy: " + a.getEnergy() + ", genotype: " + a.getGenotype()));
+                JPanel foll = new JPanel();
+                foll.add(new JLabel("click here to follow this animal ->"));
+                JButton jb = new JButton(String.valueOf(id));
+                jb.addActionListener(this::followAnimal);
+                foll.add(jb);
+                dialogPanel.add(foll);
+                id++;
             }
         } else {
             dialogPanel.add(new JLabel("Animals: NONE"));
         }
 
         JDialog d = new JDialog(mainWindow, "dialog Box");
+        d.setTitle("Objects at");
         d.add(dialogPanel);
         //d.setLocationRelativeTo(null);
         d.pack();
         d.setVisible(true);
         d.setLocation(100, 100);
+    }
+
+    private void followAnimal(ActionEvent actionEvent) {
+        int id = Integer.parseInt(actionEvent.getActionCommand()) - 1;
+        animalToFollow = animals.get(id);
+        following = new JDialog(mainWindow, "following animal");
+        refreshFollowing();
+        following.setVisible(true);
+        //System.out.println(actionEvent.getActionCommand());
+        following.setLocation(100, 100);
+    }
+
+    private void refreshFollowing() {
+        //.removeAll();
+        JPanel jp = new JPanel();
+        jp.setLayout(new BoxLayout(jp, BoxLayout.Y_AXIS));
+        jp.add(new JLabel(animalToFollow.toString()));
+        jp.add(new JLabel("Animal Energy: " + animalToFollow.getEnergy()));
+        jp.add(new JLabel("Chlidren: " + animalToFollow.getChildren()));
+        jp.add(new JLabel("Age: " + animalToFollow.getYears()));
+
+        following.add(jp);
+        following.pack();
     }
 }

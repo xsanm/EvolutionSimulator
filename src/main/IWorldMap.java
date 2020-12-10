@@ -67,4 +67,6 @@ public interface IWorldMap {
     void countStats();
 
     void getObjectsAtPosition(Vector2D vec);
+
+    void redrawAnimals();
 }

@@ -91,7 +91,7 @@ public class Genotype {
         Vector2D res = new Vector2D(0,0);
         switch (gen) {
             case 0:
-                res =  new Vector2D(0,0);
+                res =  new Vector2D(0,1);
                 break;
             case 1:
                 res = new Vector2D(1,1);

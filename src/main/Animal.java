@@ -66,7 +66,8 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
     }
 
     public void rotate() {
-        this.orientation = genotype.getRandomGene();
+        this.orientation += genotype.getRandomGene();
+        this.orientation %= 8;
     }
 
     public int getYears() {
@@ -78,7 +79,7 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
         years++;
         Vector2D oldPosition = this.position;
         //TODO
-        Vector2D moveVector = genotype.genToUnitVector(this.orientation).add(this.position).add(new Vector2D(dataManager.mapWidth, dataManager.mapWidth));
+        Vector2D moveVector = genotype.genToUnitVector(this.orientation).add(this.position).add(new Vector2D(dataManager.mapWidth, dataManager.mapHeight));
         Vector2D newPosition = new Vector2D(moveVector.x % dataManager.mapWidth, moveVector.y % dataManager.mapHeight);
         this.position = newPosition;
         //System.out.println("rooszam sie" + oldPosition + newPosition);

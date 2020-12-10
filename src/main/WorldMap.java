@@ -103,6 +103,14 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         //JDialog d = new JDialog(m, "dialog Box");
     }
 
+    @Override
+    public void redrawAnimals() {
+        for(Animal a: animalsList) {
+            //mapPanel.eraseAnimal(a);
+            mapPanel.drawAnimal(a);
+        }
+    }
+
     public MapPanel getMapPanel() {
         return mapPanel;
     }
@@ -193,7 +201,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     public void generateAnimals() {
         int cnt = dataManager.startAnimalNumber;
-        while(cnt-- >= 0) {
+        while(cnt-- > 0) {
             this.addRandomAnimal();
         }
     }
@@ -234,7 +242,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
             }
             a.move();
             a.decreaseEnergy(dataManager.moveEnergy);
-            this.mapPanel.drawAnimal(a);
+            //this.mapPanel.drawAnimal(a);
         }
 
     }
@@ -264,6 +272,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
                     MapElement grass = grasses.get(vec);
 
                     this.mapPanel.eraseGrass(grass);
+                    //this.mapPanel.drawAnimal(animalsToEat.get(0));
                     this.grasses.remove(grass.getPosition());
                 }
             }
@@ -306,8 +315,8 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         List<Vector2D> stepPositions = new ArrayList<>();
 
         for(int i = -1; i <= 1; i++) for(int j = -1; j <= 1; j++) {
-            Vector2D v = new Vector2D(vec.x + i, vec.y + j);
-            if (animals.get(vec) == null || animals.get(vec).isEmpty()) {
+            Vector2D v = new Vector2D((vec.x + i + dataManager.mapWidth) % dataManager.mapWidth, (vec.y + j + dataManager.mapHeight) % dataManager.mapHeight);
+            if (animals.get(v) == null || animals.get(v).isEmpty()) {
                 stepPositions.add(v);
             }
         }

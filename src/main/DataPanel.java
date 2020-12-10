@@ -198,6 +198,9 @@ public class DataPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
+            case "Apply Changes":
+                applyData();
+                break;
             case "START 1":
                 SIMULATE1 = true;
                 startBtn1.setEnabled(false);

@@ -152,6 +152,7 @@ public class SimulationEngine implements IEngine, ActionListener {
         map.eat();
         map.procreate();
         map.addGrass();
+        map.redrawAnimals();
         map.countStats();
         statPanel.refreshStats();
         m.repaint();
