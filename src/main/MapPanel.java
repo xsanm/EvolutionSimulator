@@ -70,7 +70,7 @@ public class MapPanel extends JPanel implements ActionListener {
         int y = dataManager.mapHeight - 1 - animal.getPosition().y;
         DrawMap panel = panels[y][animal.getPosition().x];
         panel.setDrawable(null);
-        if(animal == animalToFollow) refreshFollowing();
+        //if(animal == animalToFollow) refreshFollowing();
     }
     public void eraseGrass(MapElement element){
         //System.out.println(animal);

@@ -294,6 +294,8 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
                     if(a.getEnergy() / dataManager.startEnergy < 0.5) continue;
                     if(b.getEnergy() / dataManager.startEnergy < 0.5) continue;
 
+                    System.out.println("ROZMNAZAM I DODAJE ANIMALA");
+
                     a.setChildren(a.getChildren() + 1);
                     b.setChildren(b.getChildren() + 1);
 
