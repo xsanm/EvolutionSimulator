@@ -20,6 +20,7 @@ public class MainWindow extends JFrame {
     JPanel leftPanel;
     StatPanel statPanel1;
     StatPanel statPanel2;
+    Label l1;
 
     public MainWindow(SimulationEngine simulationEngine, DataManager dataManager, MapPanel mapa1, MapPanel mapa2, StatPanel statPanel1, StatPanel statPanel2) {
         this.simulationEngine = simulationEngine;
@@ -38,6 +39,9 @@ public class MainWindow extends JFrame {
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
 
         leftPanel.add(dataPanel);
+
+        l1 = new Label("Map 2 Stats");
+
         leftPanel.add(new Label("Map 1 Stats"));
         leftPanel.add(this.statPanel1);
 
@@ -61,12 +65,13 @@ public class MainWindow extends JFrame {
 
     public void steerSecondMap(boolean is) {
         if (is) {
-            leftPanel.add(new Label("Map 2 Stats"));
+            leftPanel.add(l1);
             leftPanel.add(this.statPanel2);
             this.add(map2Panel, BorderLayout.EAST);
             this.pack();
         } else {
             leftPanel.remove(statPanel2);
+            leftPanel.remove(l1);
             this.remove(map2Panel);
         }
 

@@ -112,22 +112,22 @@ public class DataPanel extends JPanel implements ActionListener {
 
         addGB(new Label("Map1 Steering"),  0, 16, 2, 1);
 
-        startBtn = new JButton("START");
+        startBtn = new JButton("START 1");
         startBtn.addActionListener(simulationEngine);
         //startBtn.addActionListener(this);
         addGB(startBtn,  0, 17, 1, 1);
 
-        stopBtn = new JButton("STOP");
+        stopBtn = new JButton("STOP 1");
         stopBtn.addActionListener(simulationEngine);
         //stopBtn.addActionListener(this);
         addGB(stopBtn,  1, 17, 1, 1);
 
-        stepBtn = new JButton("Make Step");
+        stepBtn = new JButton("Make Step 1");
         stepBtn.addActionListener(simulationEngine);
         //appplyBtn.addActionListener(this);
         addGB(stepBtn,  0, 18, 1, 1);
 
-        saveBtn = new JButton("save");
+        saveBtn = new JButton("Save 1");
         saveBtn.addActionListener(simulationEngine);
         //saveBtn.addActionListener(this);
         addGB(saveBtn,  1, 18, 1, 1);
@@ -138,22 +138,22 @@ public class DataPanel extends JPanel implements ActionListener {
 
         addGB(new Label("Map2 Steering"),  0, 20, 2, 1);
 
-        startBtn = new JButton("START");
+        startBtn = new JButton("START 2");
         startBtn.addActionListener(simulationEngine);
         //startBtn.addActionListener(this);
         addGB(startBtn,  0, 21, 1, 1);
 
-        stopBtn = new JButton("STOP");
+        stopBtn = new JButton("STOP 2");
         stopBtn.addActionListener(simulationEngine);
         //stopBtn.addActionListener(this);
         addGB(stopBtn,  1, 21, 1, 1);
 
-        stepBtn = new JButton("Make Step");
+        stepBtn = new JButton("Make Step 2");
         stepBtn.addActionListener(simulationEngine);
         //appplyBtn.addActionListener(this);
         addGB(stepBtn,  0, 22, 1, 1);
 
-        saveBtn = new JButton("save");
+        saveBtn = new JButton("Save 2");
         saveBtn.addActionListener(simulationEngine);
         //saveBtn.addActionListener(this);
         addGB(saveBtn,  1, 22, 1, 1);

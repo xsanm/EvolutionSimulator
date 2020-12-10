@@ -3,10 +3,6 @@ import java.awt.*;
 
 public class StatPanel extends JList {
     DataManager dataManager;
-    JLabel animals;
-    JLabel grasees;
-    JLabel age;
-    JLabel avEnergy;
 
     public StatPanel(DataManager dataManager){
         //String str[] = ;
