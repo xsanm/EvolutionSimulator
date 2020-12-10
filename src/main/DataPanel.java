@@ -22,14 +22,23 @@ public class DataPanel extends JPanel implements ActionListener {
     private JCheckBox twoMapCheckbox;
     JButton appplyBtn;
     JButton resetBtn;
-    JButton startBtn;
-    JButton stopBtn;
-    JButton stepBtn;
-    JButton saveBtn;
+    JButton startBtn1;
+    JButton stopBtn1;
+    JButton stepBtn1;
+    JButton saveBtn1;
+    JButton startBtn2;
+    JButton stopBtn2;
+    JButton stepBtn2;
+    JButton saveBtn2;
     JSlider durationSilder;
+
+    boolean SIMULATE1;
+    boolean SIMULATE2;
 
 
     public DataPanel(SimulationEngine simulationEngine, DataManager dataManager){
+        this.SIMULATE1 = false;
+        this.SIMULATE2 = false;
         this.dataManager = dataManager;
         this.simulationEngine = simulationEngine;
         constraints = new GridBagConstraints();
@@ -112,25 +121,25 @@ public class DataPanel extends JPanel implements ActionListener {
 
         addGB(new Label("Map1 Steering"),  0, 16, 2, 1);
 
-        startBtn = new JButton("START 1");
-        startBtn.addActionListener(simulationEngine);
+        startBtn1 = new JButton("START 1");
+        startBtn1.addActionListener(simulationEngine);
         //startBtn.addActionListener(this);
-        addGB(startBtn,  0, 17, 1, 1);
+        addGB(startBtn1,  0, 17, 1, 1);
 
-        stopBtn = new JButton("STOP 1");
-        stopBtn.addActionListener(simulationEngine);
+        stopBtn1 = new JButton("STOP 1");
+        stopBtn1.addActionListener(simulationEngine);
         //stopBtn.addActionListener(this);
-        addGB(stopBtn,  1, 17, 1, 1);
+        addGB(stopBtn1,  1, 17, 1, 1);
 
-        stepBtn = new JButton("Make Step 1");
-        stepBtn.addActionListener(simulationEngine);
+        stepBtn1 = new JButton("Make Step 1");
+        stepBtn1.addActionListener(simulationEngine);
         //appplyBtn.addActionListener(this);
-        addGB(stepBtn,  0, 18, 1, 1);
+        addGB(stepBtn1,  0, 18, 1, 1);
 
-        saveBtn = new JButton("Save 1");
-        saveBtn.addActionListener(simulationEngine);
+        saveBtn1 = new JButton("Save 1");
+        saveBtn1.addActionListener(simulationEngine);
         //saveBtn.addActionListener(this);
-        addGB(saveBtn,  1, 18, 1, 1);
+        addGB(saveBtn1,  1, 18, 1, 1);
 
         JSeparator sep4 = new JSeparator();
         addGB(sep4,  0, 19, 2, 1);
@@ -138,25 +147,25 @@ public class DataPanel extends JPanel implements ActionListener {
 
         addGB(new Label("Map2 Steering"),  0, 20, 2, 1);
 
-        startBtn = new JButton("START 2");
-        startBtn.addActionListener(simulationEngine);
+        startBtn2 = new JButton("START 2");
+        startBtn2.addActionListener(simulationEngine);
         //startBtn.addActionListener(this);
-        addGB(startBtn,  0, 21, 1, 1);
+        addGB(startBtn2,  0, 21, 1, 1);
 
-        stopBtn = new JButton("STOP 2");
-        stopBtn.addActionListener(simulationEngine);
+        stopBtn2 = new JButton("STOP 2");
+        stopBtn2.addActionListener(simulationEngine);
         //stopBtn.addActionListener(this);
-        addGB(stopBtn,  1, 21, 1, 1);
+        addGB(stopBtn2,  1, 21, 1, 1);
 
-        stepBtn = new JButton("Make Step 2");
-        stepBtn.addActionListener(simulationEngine);
+        stepBtn2 = new JButton("Make Step 2");
+        stepBtn2.addActionListener(simulationEngine);
         //appplyBtn.addActionListener(this);
-        addGB(stepBtn,  0, 22, 1, 1);
+        addGB(stepBtn2,  0, 22, 1, 1);
 
-        saveBtn = new JButton("Save 2");
-        saveBtn.addActionListener(simulationEngine);
+        saveBtn2 = new JButton("Save 2");
+        saveBtn2.addActionListener(simulationEngine);
         //saveBtn.addActionListener(this);
-        addGB(saveBtn,  1, 22, 1, 1);
+        addGB(saveBtn2,  1, 22, 1, 1);
 
         JSeparator sep5 = new JSeparator();
         addGB(sep5,  0, 19, 2, 1);
@@ -189,19 +198,29 @@ public class DataPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "Apply Changes":
-                applyData();
+            case "START 1":
+                SIMULATE1 = true;
+                startBtn1.setEnabled(false);
                 break;
-            case "START":
-                startBtn.setEnabled(false);
-                appplyBtn.setEnabled(false);
-                resetBtn.setEnabled(false);
-                this.repaint();
+            case "STOP 1":
+                SIMULATE1 = false;
+                startBtn1.setEnabled(true);
                 break;
-            case "STOP":
-                startBtn.setEnabled(true);
+            case "START 2":
+                SIMULATE2 = true;
+                startBtn2.setEnabled(false);
                 break;
-            case "Make Step":
+            case "STOP 2":
+                SIMULATE2 = false;
+                startBtn2.setEnabled(true);
+                break;
+            case "Make Step 1":
+                SIMULATE1 = false;
+                startBtn1.setEnabled(false);
+                break;
+            case "Make Step 2":
+                SIMULATE2 = false;
+                startBtn2.setEnabled(false);
 
                 break;
             default:
