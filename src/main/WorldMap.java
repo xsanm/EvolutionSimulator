@@ -44,7 +44,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
                     intList.add(new Vector2D(i, j));
 
         Collections.shuffle(intList);
-        for(int i = 0; i < cnt; ++i) {
+        for(int i = 0; i < cnt && i < intList.size(); ++i) {
 
             MapElement el = new MapElement(intList.get(i));
             this.mapPanel.drawGrass(el);
@@ -57,6 +57,20 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         dataManager.animals = animalsList.size();
         dataManager.grasses = grasses.size();
         dataManager.age += 1;
+        dataManager.averageEnergy = this.getAverageEnergy();
+
+
+    }
+
+    private double getAverageEnergy() {
+        double sum = 0.0;
+        for(Animal a:animalsList) {
+            sum += a.getEnergy();
+        }
+
+        if(animalsList.isEmpty()) return 0.0;
+        return sum / animalsList.size();
+
     }
 
     @Override
@@ -148,7 +162,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     public void addRandomAnimal(){
         Animal animal = new Animal(new Vector2D(generateRandom(0, dataManager.mapHeight - 1), generateRandom(0, dataManager.mapWidth - 1)),
-                new Genotype(), 1, (IPositionChangeObserver) this, dataManager);
+                new Genotype(), dataManager.startEnergy, (IPositionChangeObserver) this, dataManager);
         this.place(animal);
         this.animalsList.add(animal);
         this.mapPanel.drawAnimal(animal);
@@ -189,6 +203,10 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     public void move() {
         for(Animal a: animalsList) {
             this.mapPanel.eraseAnimal(a);
+            if(a.getEnergy() <= dataManager.moveEnergy){
+                a.decreaseEnergy(a.getEnergy() + 1.0);
+                continue;
+            }
             a.move();
             a.decreaseEnergy(dataManager.moveEnergy);
             this.mapPanel.drawAnimal(a);
@@ -198,14 +216,28 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public void eat() {
-        //TODO jedza najslisi
         for(int i = 0; i < dataManager.mapHeight; i++)
             for(int j = 0; j < dataManager.mapWidth; j++) {
                 Vector2D vec = new Vector2D(i, j);
-                if (animals.get(vec) != null && !animals.get(vec).isEmpty() && grasses.get(vec) != null) {
-                    Animal a = animals.get(vec).get(0);
+                List<Animal> animalsToEat = animals.get(vec);
+                if (animalsToEat != null && !animalsToEat.isEmpty() && grasses.get(vec) != null) {
+
+                    Collections.sort(animalsToEat);
+                    //System.out.println(animalsToEat);
+                    ///System.out.println("fgfh");
+
+                    if(animalsToEat.size() == 1) {
+                        animalsToEat.get(0).encreaseEnergy(dataManager.grassEnergy);
+                    } else {
+                        int cnt = 1;
+                        for(cnt = 1; cnt < animalsToEat.size() && animalsToEat.get(cnt - 1).getEnergy() == animalsToEat.get(cnt).getEnergy(); cnt++);
+                        for(int k = 0; k < cnt; k++) {
+                            animalsToEat.get(k).encreaseEnergy(dataManager.grassEnergy / cnt);
+                        }
+                    }
+
                     MapElement grass = grasses.get(vec);
-                    a.encreaseEnergy(dataManager.grassEnergy);
+
                     this.mapPanel.eraseGrass(grass);
                     this.grasses.remove(grass.getPosition());
                 }
@@ -215,13 +247,19 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public void procreate() {
-        //TODO romnazaja sie najsilniejsi
         for(int i = 0; i < dataManager.mapHeight; i++)
             for(int j = 0; j < dataManager.mapWidth; j++) {
                 Vector2D vec = new Vector2D(i, j);
-                if (animals.get(vec) != null && animals.get(vec).size() > 1) {
+                List<Animal> animalsToProcreate = animals.get(vec);
+                if (animalsToProcreate != null && animalsToProcreate.size() > 1) {
+
+                    Collections.sort(animalsToProcreate);
                     Animal a = animals.get(vec).get(0);
                     Animal b = animals.get(vec).get(1);
+
+                    if(a.getEnergy() / dataManager.startEnergy < 0.5) continue;
+                    if(b.getEnergy() / dataManager.startEnergy < 0.5) continue;
+
                     a.decreaseEnergy(a.getEnergy() * 0.25);
                     b.decreaseEnergy(b.getEnergy() * 0.25);
                     Animal c = new Animal(getPosAround(vec), new Genotype(a.getGenotype().getGenes(), b.getGenotype().getGenes()), a.getEnergy() * 0.25 + b.getEnergy() * 0.25, this, dataManager);

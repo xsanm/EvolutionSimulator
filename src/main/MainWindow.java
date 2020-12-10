@@ -53,6 +53,7 @@ public class MainWindow extends JFrame {
         this.add(map1Panel, BorderLayout.CENTER);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //this.setPreferredSize(new Dimension(800, 800));
+        this.setMinimumSize(new Dimension(800, 800));
         //this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.pack();
@@ -64,7 +65,7 @@ public class MainWindow extends JFrame {
             leftPanel.add(this.statPanel2);
             this.add(map2Panel, BorderLayout.EAST);
         } else {
-            leftPanel.removeAll();
+            leftPanel.remove(statPanel2);
             this.remove(map2Panel);
         }
 

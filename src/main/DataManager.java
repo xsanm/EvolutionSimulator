@@ -3,6 +3,7 @@ import java.awt.event.ActionListener;
 
 public class DataManager{
     public int duration;
+    public double averageEnergy;
     int startGrassNumber;
     int age;
     int grasses;

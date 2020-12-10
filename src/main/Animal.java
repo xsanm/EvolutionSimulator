@@ -10,7 +10,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-public class Animal implements Comparable<Animal>, Drawable {
+import static java.lang.Math.*;
+
+public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> {
     private Vector2D position;
     private int orientation;
     private Genotype genotype;
@@ -74,6 +76,12 @@ public class Animal implements Comparable<Animal>, Drawable {
 
 
     @Override
+    public int compare(Animal o1, Animal o2) {
+        if(o1.energy > o2.energy) return 1;
+        else return -1;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -98,7 +106,8 @@ public class Animal implements Comparable<Animal>, Drawable {
 
     @Override
     public int compareTo(Animal o) {
-        return (int) (this.energy - o.energy);
+        if(o.energy > this.energy) return 1;
+        else return -1;
     }
 
     public void positionChanged(Animal animal, Vector2D oldPosition, Vector2D newPosition){
@@ -111,19 +120,21 @@ public class Animal implements Comparable<Animal>, Drawable {
     @Override
     public void draw(Graphics g) {
         double rotationRequired = Math.toRadians (orientation * 45);
+
         double locationX = image.getWidth() / 2;
         double locationY = image.getHeight() / 2;
         AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
         AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-        g.drawImage(op.filter(image, null), 0, 0, null);
-        //g.fillOval(position.x, position.y, 30, 30);
+        g.drawImage(op.filter(image, null), 5, 0, 20, 20,null);
+        g.drawRect(3, 18, 24, 8);
+        g.fillRect(3, 18, min(24, (int) (24 * (this.energy / dataManager.startEnergy))), 8);
     }
 
     public double getEnergy() {
         return energy;
     }
     public void decreaseEnergy(double e) {
-        this.energy -= e;
+        this.energy = max(0, this.energy - e);
     }
     public void encreaseEnergy(double e) {
         this.energy += e;
