@@ -41,8 +41,8 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     public void generateGrasses() {
         int cnt = (int) (dataManager.startGrassNumber);
         List<Vector2D> intList = new ArrayList<>();
-        for(int i = 0; i < dataManager.mapHeight; i++)
-            for(int j = 0; j < dataManager.mapWidth; j++)
+        for(int i = 0; i < dataManager.mapWidth; i++)
+            for(int j = 0; j < dataManager.mapHeight; j++)
                 if(animals.get(new Vector2D(i, j)) == null)
                     intList.add(new Vector2D(i, j));
 
@@ -195,7 +195,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
     public void addRandomAnimal(){
-        Animal animal = new Animal(new Vector2D(generateRandom(0, dataManager.mapHeight - 1), generateRandom(0, dataManager.mapWidth - 1)),
+        Animal animal = new Animal(new Vector2D(generateRandom(0, dataManager.mapWidth - 1), generateRandom(0, dataManager.mapHeight - 1)),
                 new Genotype(), dataManager.startEnergy, (IPositionChangeObserver) this, dataManager);
         this.place(animal);
         this.animalsList.add(animal);

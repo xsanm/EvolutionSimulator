@@ -123,17 +123,18 @@ public class DataPanel extends JPanel implements ActionListener {
 
         startBtn1 = new JButton("START 1");
         startBtn1.addActionListener(simulationEngine);
-        //startBtn.addActionListener(this);
+        startBtn1.addActionListener(this);
         addGB(startBtn1,  0, 17, 1, 1);
 
         stopBtn1 = new JButton("STOP 1");
         stopBtn1.addActionListener(simulationEngine);
-        //stopBtn.addActionListener(this);
+        stopBtn1.addActionListener(this);
+        stopBtn1.setEnabled(false);
         addGB(stopBtn1,  1, 17, 1, 1);
 
         stepBtn1 = new JButton("Make Step 1");
         stepBtn1.addActionListener(simulationEngine);
-        //appplyBtn.addActionListener(this);
+        stepBtn1.addActionListener(this);
         addGB(stepBtn1,  0, 18, 1, 1);
 
         saveBtn1 = new JButton("Save 1");
@@ -149,21 +150,26 @@ public class DataPanel extends JPanel implements ActionListener {
 
         startBtn2 = new JButton("START 2");
         startBtn2.addActionListener(simulationEngine);
-        //startBtn.addActionListener(this);
+        startBtn2.addActionListener(this);
+        startBtn2.setVisible(false);
         addGB(startBtn2,  0, 21, 1, 1);
 
         stopBtn2 = new JButton("STOP 2");
         stopBtn2.addActionListener(simulationEngine);
-        //stopBtn.addActionListener(this);
+        stopBtn2.addActionListener(this);
+        stopBtn2.setEnabled(false);
+        stopBtn2.setVisible(false);
         addGB(stopBtn2,  1, 21, 1, 1);
 
         stepBtn2 = new JButton("Make Step 2");
         stepBtn2.addActionListener(simulationEngine);
-        //appplyBtn.addActionListener(this);
+        stepBtn2.addActionListener(this);
+        stepBtn2.setVisible(false);
         addGB(stepBtn2,  0, 22, 1, 1);
 
         saveBtn2 = new JButton("Save 2");
         saveBtn2.addActionListener(simulationEngine);
+        saveBtn2.setVisible(false);
         //saveBtn.addActionListener(this);
         addGB(saveBtn2,  1, 22, 1, 1);
 
@@ -200,30 +206,62 @@ public class DataPanel extends JPanel implements ActionListener {
         switch (e.getActionCommand()) {
             case "Apply Changes":
                 applyData();
+                if(dataManager.twoMaps) {
+                    startBtn2.setVisible(true);
+                    stopBtn2.setVisible(true);
+                    stepBtn2.setVisible(true);
+                    saveBtn2.setVisible(true);
+                } else {
+                    startBtn2.setVisible(false);
+                    stopBtn2.setVisible(false);
+                    stepBtn2.setVisible(false);
+                    saveBtn2.setVisible(false);
+                }
                 break;
             case "START 1":
                 SIMULATE1 = true;
                 startBtn1.setEnabled(false);
+                stopBtn1.setEnabled(true);
+                appplyBtn.setEnabled(false);
+                resetBtn.setEnabled(false);
+                stepBtn1.setEnabled(false);
+                this.repaint();
                 break;
             case "STOP 1":
                 SIMULATE1 = false;
                 startBtn1.setEnabled(true);
+                stepBtn1.setEnabled(true);
+                stopBtn1.setEnabled(false);
+                if(!SIMULATE2) {
+                    appplyBtn.setEnabled(true);
+                    resetBtn.setEnabled(true);
+                }
                 break;
             case "START 2":
                 SIMULATE2 = true;
                 startBtn2.setEnabled(false);
+                stopBtn2.setEnabled(true);
+                appplyBtn.setEnabled(false);
+                resetBtn.setEnabled(false);
+                stepBtn2.setEnabled(false);
                 break;
             case "STOP 2":
                 SIMULATE2 = false;
                 startBtn2.setEnabled(true);
+                stepBtn2.setEnabled(true);
+                stopBtn2.setEnabled(false);
+                if(!SIMULATE1) {
+                    appplyBtn.setEnabled(true);
+                    resetBtn.setEnabled(true);
+                }
                 break;
             case "Make Step 1":
-                SIMULATE1 = false;
-                startBtn1.setEnabled(false);
+
+
                 break;
             case "Make Step 2":
-                SIMULATE2 = false;
-                startBtn2.setEnabled(false);
+
+
 
                 break;
             default:
