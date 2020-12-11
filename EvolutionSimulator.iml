@@ -9,5 +9,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="junit:junit:4.13" level="project" />
+    <orderEntry type="library" name="org.json:json:20200518" level="project" />
   </component>
 </module>

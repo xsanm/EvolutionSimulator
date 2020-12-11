@@ -48,14 +48,14 @@ public class DataPanel extends JPanel implements ActionListener {
         this.setLayout(new GridBagLayout());
         this.setPreferredSize(new Dimension(250, 500));
 
-        widthSpinner = new JSpinner(new SpinnerNumberModel(10, 3, 50, 1));
-        heightSpinner = new JSpinner(new SpinnerNumberModel(10, 3, 50, 1));
-        animalsNumberSpinner = new JSpinner(new SpinnerNumberModel(15, 0, 1000, 1));
-        grassNumberSpinner = new JSpinner(new SpinnerNumberModel(30, 0, 1000, 1));
-        startEnergySpinner = new JSpinner(new SpinnerNumberModel(2.5, 0, 5.0, 0.1));
-        moveEnergySpinner = new JSpinner(new SpinnerNumberModel(0.1, 0, 5.0, 0.1));
-        grassEnergySpinner = new JSpinner(new SpinnerNumberModel(1.0, 0, 5.0, 0.1));
-        jungleRatioSpinner = new JSpinner(new SpinnerNumberModel(0.50, 0, 1.0, 0.1));
+        widthSpinner = new JSpinner(new SpinnerNumberModel(dataManager.mapWidth, 3, 50, 1));
+        heightSpinner = new JSpinner(new SpinnerNumberModel(dataManager.mapHeight, 3, 50, 1));
+        animalsNumberSpinner = new JSpinner(new SpinnerNumberModel(dataManager.startAnimalNumber, 0, 1000, 1));
+        grassNumberSpinner = new JSpinner(new SpinnerNumberModel(dataManager.startGrassNumber, 0, 1000, 1));
+        startEnergySpinner = new JSpinner(new SpinnerNumberModel(dataManager.startEnergy, 0, 5.0, 0.1));
+        moveEnergySpinner = new JSpinner(new SpinnerNumberModel(dataManager.moveEnergy, 0, 5.0, 0.1));
+        grassEnergySpinner = new JSpinner(new SpinnerNumberModel(dataManager.grassEnergy, 0, 5.0, 0.1));
+        jungleRatioSpinner = new JSpinner(new SpinnerNumberModel(dataManager.jungleRatio, 0, 1.0, 0.1));
         twoMapCheckbox = new JCheckBox();
 
 
@@ -106,7 +106,7 @@ public class DataPanel extends JPanel implements ActionListener {
         addGB(sep2,  0, 12, 2, 1);
 
         addGB(new Label("Set gap between ages [ms]"),  0, 13, 2, 1);
-        durationSilder = new JSlider(0, 2000, 1000);
+        durationSilder = new JSlider(0, 2000, dataManager.duration);
         durationSilder.setPaintTrack(true);
         durationSilder.setPaintTicks(true);
         durationSilder.setPaintLabels(true);

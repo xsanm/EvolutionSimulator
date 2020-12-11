@@ -1,0 +1,16 @@
+{
+  "StartingParameters":
+    {
+      "mapWidth": 15,
+      "mapHeight" : 15,
+      "startAnimalNumber" : 15,
+      "startEnergy" : 2.5,
+      "moveEnergy" : 0.1,
+      "grassEnergy" : 1.0,
+      "jungleRatio" : 0.5,
+      "twoMaps" : false,
+      "startGrassNumber" : 30,
+      "duration" : 1000
+      }
+
+}
