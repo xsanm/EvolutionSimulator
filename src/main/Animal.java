@@ -5,6 +5,8 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -46,7 +48,9 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
         years = 0;
         children = 0;
         try {
-            image = ImageIO.read(new File("C:\\Users\\xsan\\Desktop\\arr3.png"));
+            String path = new File("src/main/arr3.png").getAbsolutePath();
+            //System.out.println(path);
+            image = ImageIO.read(new File(path));
         } catch (IOException e) {
             e.printStackTrace();
         }

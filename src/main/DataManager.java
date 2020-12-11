@@ -1,5 +1,6 @@
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +31,9 @@ public class DataManager {
         //TODO try catch jesli plik sie zmineil
         String jsonString = null; //assign your JSON String here
         try {
-            jsonString = Files.readString(Path.of("C:\\Users\\xsan\\Desktop\\EvolutionSimulator\\src\\main\\startingParameters.json"));
+            String path = new File("src/main/startingParameters.json").getAbsolutePath();
+            System.out.println(path);
+            jsonString = Files.readString(Path.of(path));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -61,7 +61,7 @@ public class SimulationEngine implements IEngine, ActionListener {
             statPanel2.refreshStats();
         }
 
-
+        m.repaint();
         m.pack();
         //GENERATE GRASS
 

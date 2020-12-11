@@ -11,7 +11,12 @@ public class MapElement implements Comparable<MapElement>, Drawable {
     public MapElement(Vector2D position) {
         this.position = position;
         try {
-            image = ImageIO.read(new File("C:\\Users\\xsan\\Desktop\\grass.png"));
+            String path = new File("src/main/grass.png").getAbsolutePath();
+            //System.out.println(path);
+            image = ImageIO.read(new File(path));
+
+
+            //image = ImageIO.read(new File("C:\\Users\\xsan\\Desktop\\grass.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
