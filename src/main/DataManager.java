@@ -1,11 +1,5 @@
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.InputStream;
-
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +8,7 @@ import java.nio.file.Path;
 //import org.json.simple.JSONObject;
 
 
-public class DataManager{
+public class DataManager {
     int duration;
     int startGrassNumber;
 
@@ -28,12 +22,11 @@ public class DataManager{
     boolean twoMaps;
 
 
-
-    public DataManager(){
+    public DataManager() {
         resetData();
     }
 
-    public void resetData(){
+    public void resetData() {
         //TODO try catch jesli plik sie zmineil
         String jsonString = null; //assign your JSON String here
         try {

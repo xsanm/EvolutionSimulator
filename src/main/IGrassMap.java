@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public interface IGrassMap {
 
     boolean place(MapElement element);

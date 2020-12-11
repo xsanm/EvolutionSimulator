@@ -3,7 +3,7 @@ import java.util.Objects;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class Vector2D  implements Comparable<Vector2D>{
+public class Vector2D implements Comparable<Vector2D> {
     public final int x;
     public final int y;
 
@@ -60,11 +60,11 @@ public class Vector2D  implements Comparable<Vector2D>{
 
     @Override
     public int compareTo(Vector2D o) {
-        if(this.equals(o))
+        if (this.equals(o))
             return 0;
-        if(this.x < o.x)
+        if (this.x < o.x)
             return -1;
-        else if(this.x == o.x)
+        else if (this.x == o.x)
             return this.y - o.y;
         else
             return 1;

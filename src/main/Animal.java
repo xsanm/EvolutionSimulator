@@ -10,27 +10,26 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> {
+    DataManager dataManager;
+    BufferedImage image;
     private Vector2D position;
     private int orientation;
     private Genotype genotype;
     private double energy;
     private List<IPositionChangeObserver> observers = new ArrayList<>();
-    DataManager dataManager;
     private int years;
     private int children;
 
 
-    BufferedImage image;
-
-
-    public Animal(){
+    public Animal() {
 
     }
 
-    public Animal(Vector2D position, Genotype genotype, double energy){
+    public Animal(Vector2D position, Genotype genotype, double energy) {
         this.position = position;
         this.genotype = genotype;
         this.orientation = genotype.getRandomGene();
@@ -53,16 +52,16 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
         }
     }
 
-    public void setChildren(int children) {
-        this.children = children;
+    public Animal(Vector2D vector2D) {
+        this.position = vector2D;
     }
 
     public int getChildren() {
         return children;
     }
 
-    public Animal(Vector2D vector2D) {
-        this.position = vector2D;
+    public void setChildren(int children) {
+        this.children = children;
     }
 
     public void rotate() {
@@ -87,14 +86,14 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
         this.positionChanged(this, oldPosition, newPosition);
     }
 
-    public Vector2D getPosition(){
+    public Vector2D getPosition() {
         return this.position;
     }
 
 
     @Override
     public int compare(Animal o1, Animal o2) {
-        if(o1.energy > o2.energy) return 1;
+        if (o1.energy > o2.energy) return 1;
         else return -1;
     }
 
@@ -123,12 +122,12 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
 
     @Override
     public int compareTo(Animal o) {
-        if(o.energy > this.energy) return 1;
+        if (o.energy > this.energy) return 1;
         else return -1;
     }
 
-    public void positionChanged(Animal animal, Vector2D oldPosition, Vector2D newPosition){
-        for(IPositionChangeObserver observer : this.observers){
+    public void positionChanged(Animal animal, Vector2D oldPosition, Vector2D newPosition) {
+        for (IPositionChangeObserver observer : this.observers) {
             observer.positionChanged(this, oldPosition, newPosition);
 
         }
@@ -136,13 +135,13 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
 
     @Override
     public void draw(Graphics g) {
-        double rotationRequired = Math.toRadians (orientation * 45);
+        double rotationRequired = Math.toRadians(orientation * 45);
 
         double locationX = image.getWidth() / 2;
         double locationY = image.getHeight() / 2;
         AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
         AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-        g.drawImage(op.filter(image, null), 5, 0, 20, 20,null);
+        g.drawImage(op.filter(image, null), 5, 0, 20, 20, null);
         g.drawRect(3, 18, 24, 8);
         g.fillRect(3, 18, min(24, (int) (24 * (this.energy / dataManager.startEnergy))), 8);
     }
@@ -150,9 +149,11 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
     public double getEnergy() {
         return energy;
     }
+
     public void decreaseEnergy(double e) {
         this.energy = max(0, this.energy - e);
     }
+
     public void encreaseEnergy(double e) {
         this.energy += e;
     }

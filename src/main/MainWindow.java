@@ -1,16 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.util.jar.JarEntry;
-
-import static javax.swing.BoxLayout.Y_AXIS;
 
 public class MainWindow extends JFrame {
 
-    private SimulationEngine simulationEngine;
     DataManager dataManager;
     DataPanel dataPanel;
     MapPanel mapa1;
@@ -21,6 +13,7 @@ public class MainWindow extends JFrame {
     StatPanel statPanel1;
     StatPanel statPanel2;
     Label l1;
+    private SimulationEngine simulationEngine;
 
     public MainWindow(SimulationEngine simulationEngine, DataManager dataManager, MapPanel mapa1, MapPanel mapa2, StatPanel statPanel1, StatPanel statPanel2) {
         this.simulationEngine = simulationEngine;

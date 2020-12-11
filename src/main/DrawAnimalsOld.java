@@ -1,13 +1,12 @@
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
-import java.util.List;
 
 public class DrawAnimalsOld {
-    private JButton button1;
-    public JPanel panel1;
-    public JTable table1;
     final int width;
     final int height;
+    public JPanel panel1;
+    public JTable table1;
+    private JButton button1;
 
     public DrawAnimalsOld(int x, int y) {
         this.width = x;

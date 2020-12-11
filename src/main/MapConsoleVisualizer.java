@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.SortedSet;
 
 public class MapConsoleVisualizer {
     private static final String EMPTY_CELL = " ";
@@ -89,7 +88,7 @@ public class MapConsoleVisualizer {
             } else {
                 result = EMPTY_CELL;
             }
-        } else if(this.grassMap.isOccupied(currentPosition)){
+        } else if (this.grassMap.isOccupied(currentPosition)) {
             result = "*";
 
         } else {

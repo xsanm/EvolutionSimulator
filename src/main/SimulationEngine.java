@@ -1,32 +1,26 @@
 import javax.swing.*;
-import javax.swing.Timer;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine implements IEngine, ActionListener {
-    private IWorldMap map1;
-    private IWorldMap map2;
     DataManager dataManager;
     List<Animal> animalList;
     MapPanel mapPanel1;
     MapPanel mapPanel2;
     MainWindow m;
-    private boolean SIMULATE1;
-    private boolean SIMULATE2;
     StatPanel statPanel1;
     StatPanel statPanel2;
     StatManager statManager1;
     StatManager statManager2;
-
-
+    private IWorldMap map1;
+    private IWorldMap map2;
+    private boolean SIMULATE1;
+    private boolean SIMULATE2;
     private Timer stepTimer;
 
-    public SimulationEngine(){
+    public SimulationEngine() {
         SIMULATE1 = false;
         SIMULATE2 = false;
 
@@ -44,6 +38,7 @@ public class SimulationEngine implements IEngine, ActionListener {
 
         initialize();
     }
+
     public void initialize() {
         statManager1.resetStats();
         statManager2.resetStats();
@@ -58,14 +53,13 @@ public class SimulationEngine implements IEngine, ActionListener {
         map1.countStats();
         statPanel1.refreshStats();
 
-        if(dataManager.twoMaps) {
+        if (dataManager.twoMaps) {
             map2.generateAnimals();
             map2.generateGrasses();
             map2.countStats();
             map2.countStats();
             statPanel2.refreshStats();
         }
-
 
 
         m.pack();
@@ -98,7 +92,7 @@ public class SimulationEngine implements IEngine, ActionListener {
                 break;
             case "START 1":
                 SIMULATE1 = true;
-                if(!stepTimer.isRunning()) stepTimer.start();
+                if (!stepTimer.isRunning()) stepTimer.start();
                 //stepTimer = new Timer(dataManager.duration, this::startEngine);
                 stepTimer.start();
 
@@ -106,14 +100,14 @@ public class SimulationEngine implements IEngine, ActionListener {
                 break;
             case "STOP 1":
                 SIMULATE1 = false;
-                if(stepTimer != null && !SIMULATE2){
+                if (stepTimer != null && !SIMULATE2) {
                     stepTimer.stop();
                     //stepTimer = null;
                 }
                 break;
             case "START 2":
                 SIMULATE2 = true;
-                if(!stepTimer.isRunning()) stepTimer.start();
+                if (!stepTimer.isRunning()) stepTimer.start();
                 //stepTimer = new Timer(dataManager.duration, this::startEngine);
                 //stepTimer.start();
 
@@ -121,7 +115,7 @@ public class SimulationEngine implements IEngine, ActionListener {
                 break;
             case "STOP 2":
                 SIMULATE2 = false;
-                if(stepTimer != null && !SIMULATE1){
+                if (stepTimer != null && !SIMULATE1) {
                     stepTimer.stop();
                     //stepTimer = null;
                 }
@@ -131,7 +125,7 @@ public class SimulationEngine implements IEngine, ActionListener {
                 //System.out.println(dataManager);
                 cycle(map1, statPanel1);
                 break;
-                case "Make Step 2":
+            case "Make Step 2":
                 SIMULATE2 = false;
                 //System.out.println(dataManager);
                 cycle(map2, statPanel2);
@@ -145,7 +139,7 @@ public class SimulationEngine implements IEngine, ActionListener {
                     statManager1.setStatFile(j.getSelectedFile().getAbsolutePath());
                     //dataManager.saving = true;
                     //dataManager.statFile = j.getSelectedFile().getAbsolutePath();
-                            // set the label to the path of the selected file
+                    // set the label to the path of the selected file
                     System.out.println((j.getSelectedFile().getAbsolutePath()));
                 }
 
@@ -156,13 +150,13 @@ public class SimulationEngine implements IEngine, ActionListener {
         }
     }
 
-    private void startEngine(ActionEvent e){
-        if(SIMULATE1) cycle(map1, statPanel1);
-        if(SIMULATE2)if(dataManager.twoMaps) cycle(map2, statPanel2);
+    private void startEngine(ActionEvent e) {
+        if (SIMULATE1) cycle(map1, statPanel1);
+        if (SIMULATE2) if (dataManager.twoMaps) cycle(map2, statPanel2);
     }
 
-    public void speedChanged(){
-        if(stepTimer != null && stepTimer.isRunning()){
+    public void speedChanged() {
+        if (stepTimer != null && stepTimer.isRunning()) {
             this.stepTimer.setDelay(dataManager.duration);
         }
     }
@@ -199,10 +193,9 @@ public class SimulationEngine implements IEngine, ActionListener {
 
     }*/
 
-    private int generateRandom(int min, int max){
+    private int generateRandom(int min, int max) {
         return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
-
 
 
     public void runSimulation() {

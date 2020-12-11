@@ -1,12 +1,9 @@
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
-public class GrassMap implements IGrassMap{
-    protected TreeMap<Vector2D, MapElement> grasses;
+public class GrassMap implements IGrassMap {
     private final int MAP_WIDTH;
     private final int MAP_HEIGHT;
+    protected TreeMap<Vector2D, MapElement> grasses;
     IWorldMap map;
 
     public GrassMap(IWorldMap imap, int map_width, int map_height) {
@@ -18,12 +15,12 @@ public class GrassMap implements IGrassMap{
 
     //TODO
     public void addGrass() {
-        Vector2D v1 = new Vector2D(1,1);
-        Vector2D v2 = new Vector2D(3,3);
-        if(!map.isOccupied(v1)) {
+        Vector2D v1 = new Vector2D(1, 1);
+        Vector2D v2 = new Vector2D(3, 3);
+        if (!map.isOccupied(v1)) {
             this.place(new MapElement(v1));
         }
-        if(!map.isOccupied(v2)) {
+        if (!map.isOccupied(v2)) {
             this.place(new MapElement(v2));
         }
     }
