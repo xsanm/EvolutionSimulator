@@ -5,7 +5,6 @@ public class StatPanel extends JList {
     StatManager statManager;
 
     public StatPanel(StatManager statManager){
-        //String str[] = ;
         super(new DefaultListModel<>());
         this.statManager = statManager;
         refreshStats();

@@ -136,6 +136,21 @@ public class SimulationEngine implements IEngine, ActionListener {
                 //System.out.println(dataManager);
                 cycle(map2, statPanel2);
                 break;
+            case "Save 1":
+                JFileChooser j = new JFileChooser();
+
+                int r = j.showSaveDialog(null);
+                if (r == JFileChooser.APPROVE_OPTION) {
+                    statManager1.setSaving(true);
+                    statManager1.setStatFile(j.getSelectedFile().getAbsolutePath());
+                    //dataManager.saving = true;
+                    //dataManager.statFile = j.getSelectedFile().getAbsolutePath();
+                            // set the label to the path of the selected file
+                    System.out.println((j.getSelectedFile().getAbsolutePath()));
+                }
+
+
+                break;
             default:
                 System.out.println("dgfhdfh");
         }

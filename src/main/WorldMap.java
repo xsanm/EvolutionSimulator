@@ -65,13 +65,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         statManager.setAverageChildren(this.getAverageChildren());
         statManager.setAverageLife(this.getAverageLife());
         statManager.setDominatingGene(this.getDominatingGenotype());
-        //dataManager.animals = animalsList.size();
-        //dataManager.grasses = grasses.size();
-       // dataManager.age += 1;
-        //dataManager.averageEnergy = this.getAverageEnergy();
-        //dataManager.averageLife = this.getAverageLife();
-        //dataManager.averageChildren = this.getAverageChildren();
-        //dataManager.dominatingGenotype = this.getDominatingGenotype();
+        statManager.saveStat();
     }
 
     private int getDominatingGenotype() {

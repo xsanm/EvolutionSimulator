@@ -35,7 +35,6 @@ public class DataManager{
 
     public void resetData(){
         //TODO try catch jesli plik sie zmineil
-
         String jsonString = null; //assign your JSON String here
         try {
             jsonString = Files.readString(Path.of("C:\\Users\\xsan\\Desktop\\EvolutionSimulator\\src\\main\\startingParameters.json"));
