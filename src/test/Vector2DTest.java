@@ -1,3 +1,4 @@
+import objects.Vector2D;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
