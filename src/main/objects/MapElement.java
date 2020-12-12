@@ -14,11 +14,7 @@ public class MapElement implements Comparable<MapElement>, Drawable {
         this.position = position;
         try {
             String path = new File("src/assets/grass.png").getAbsolutePath();
-            //System.out.println(path);
             image = ImageIO.read(new File(path));
-
-
-            //image = ImageIO.read(new File("C:\\Users\\xsan\\Desktop\\grass.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

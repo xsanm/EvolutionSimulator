@@ -119,8 +119,6 @@ public class StatManager {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
-
 
 }

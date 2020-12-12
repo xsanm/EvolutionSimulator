@@ -42,8 +42,6 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         this.statManager = statManager;
         this.mapPanel = mapPanel;
         this.mapPanel.resizeMap(dataManager, this);
-        //System.out.println(this.mapPanel);
-        //System.out.println(dataManager);
     }
 
     public void generateGrasses() {
@@ -109,15 +107,14 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public void getObjectsAtPosition(Vector2D vec) {
-        System.out.println(animals.get(vec));
-        System.out.println(grasses.get(vec));
+        //System.out.println(animals.get(vec));
+        //System.out.println(grasses.get(vec));
         //JDialog d = new JDialog(m, "dialog Box");
     }
 
     @Override
     public void redrawAnimals() {
         for (Animal a : animalsList) {
-            //mapPanel.eraseAnimal(a);
             mapPanel.drawAnimal(a);
         }
     }
@@ -155,7 +152,6 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
         this.animals.get(animal.getPosition()).add(animal);
 
-
         return true;
     }
 
@@ -171,16 +167,13 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public String toString() {
-        //map.MapConsoleVisualizer mapa = new map.MapConsoleVisualizer(this, grassMap);
-        //return mapa.draw(new objects.Vector2D(0, 0), new objects.Vector2D(MAP_WIDTH - 1, MAP_WIDTH - 1));
-        return "AMPA";
+      return "MAPA";
     }
 
 
     public TreeMap<Vector2D, List<Animal>> getAnimals() {
         return animals;
     }
-
 
     public int getMAP_HEIGHT() {
         return MAP_HEIGHT;
@@ -191,14 +184,8 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
     public void positionChanged(Animal animal, Vector2D oldPosition, Vector2D newPosition) {
-        // objects.Animal animal = (objects.Animal) this.objectAt(oldPosition);
         this.animals.get(oldPosition).remove(animal);
         this.place(animal);
-
-        //this.animals.put(newPosition, animal);
-        //this.animals.remove(oldPosition);
-        //mapBoundary.positionChanged(oldPosition, newPosition);
-        //mapBoundary.positionChanged(oldPosition, newPosition);
     }
 
     public void addRandomAnimal() {
@@ -305,7 +292,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
                     if (a.getEnergy() / dataManager.getStartEnergy() < 0.5) continue;
                     if (b.getEnergy() / dataManager.getStartEnergy() < 0.5) continue;
 
-                   // System.out.println("ROZMNAZAM I DODAJE ANIMALA");
+                    // System.out.println("ROZMNAZAM I DODAJE ANIMALA");
 
                     a.setChildren(a.getChildren() + 1);
                     b.setChildren(b.getChildren() + 1);
@@ -364,7 +351,6 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
             MapElement el = new MapElement(stepPositions.get(0));
             this.mapPanel.drawGrass(el);
             grasses.put(el.getPosition(), el);
-            //System.out.println("dodaje trawe");
         }
         if (!junglePositions.isEmpty()) {
             MapElement el = new MapElement(junglePositions.get(0));

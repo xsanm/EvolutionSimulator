@@ -28,10 +28,7 @@ public class MapPanel extends JPanel implements ActionListener {
         this.mapa = mapa;
         int rows = dataManager.getMapHeight();
         int cols = dataManager.getMapWidth();
-        //objects.Vector2D begin = mapa.getJungleBegin();
-        //objects.Vector2D end = mapa.getJungleEnd();
         panels = new DrawMap[rows][cols];
-        //resizeMap(dataManager, mapa);
     }
 
     public void resizeMap(DataManager dataManager, IWorldMap mapa) {
@@ -41,8 +38,6 @@ public class MapPanel extends JPanel implements ActionListener {
         int cols = dataManager.getMapWidth();
         Vector2D begin = mapa.getJungleBegin();
         Vector2D end = mapa.getJungleEnd();
-        //System.out.println(begin);
-        //System.out.println(end);
         MapPanel.this.removeAll();
 
         setLayout(new GridLayout(rows, cols));
@@ -64,8 +59,6 @@ public class MapPanel extends JPanel implements ActionListener {
     }
 
     public void drawAnimal(Animal animal) {
-        //System.out.println(animal);
-        //int x = dataManager.mapHeight - 1 - animal.getPosition().x;
         int y = dataManager.getMapHeight() - 1 - animal.getPosition().y;
         DrawMap panel = panels[y][animal.getPosition().x];
         panel.setDrawable(animal);
@@ -73,31 +66,21 @@ public class MapPanel extends JPanel implements ActionListener {
     }
 
     public void eraseAnimal(Animal animal) {
-        //System.out.println(animal);
         int y = dataManager.getMapHeight() - 1 - animal.getPosition().y;
         DrawMap panel = panels[y][animal.getPosition().x];
         panel.setDrawable(null);
-        //if(animal == animalToFollow) refreshFollowing();
     }
 
     public void eraseGrass(MapElement element) {
-        //System.out.println(animal);
         int y = dataManager.getMapHeight() - 1 - element.getPosition().y;
         DrawMap panel = panels[y][element.getPosition().x];
         panel.setDrawable(null);
     }
 
     public void drawGrass(MapElement element) {
-        //System.out.println(animal);
         int y = dataManager.getMapHeight() - 1 - element.getPosition().y;
         DrawMap panel = panels[y][element.getPosition().x];
         panel.setDrawable(element);
-    }
-
-
-    public void drawSomething(int x, int y) {
-        DrawMap panel = panels[x][y];
-        panel.setDrawable(new Animal(new Vector2D(2, 3)));
     }
 
     public void setMainWindow(MainWindow mainWindow) {
@@ -109,10 +92,7 @@ public class MapPanel extends JPanel implements ActionListener {
 
         DrawMap btn = (DrawMap) e.getSource();
         Vector2D vec = new Vector2D(btn.getX() / 30, dataManager.getMapHeight() - 1 - btn.getY() / 30);
-        System.out.println(vec);
         mapa.getObjectsAtPosition(vec);
-        //e.getSource();
-        //System.out.println(e.getSource());
         JPanel dialogPanel = new JPanel();
         dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.PAGE_AXIS));
         dialogPanel.add(new JLabel("Postion: " + vec));
@@ -138,7 +118,6 @@ public class MapPanel extends JPanel implements ActionListener {
         JDialog d = new JDialog(mainWindow, "dialog Box");
         d.setTitle("Objects at");
         d.add(dialogPanel);
-        //d.setLocationRelativeTo(null);
         d.pack();
         d.setVisible(true);
         d.setLocation(100, 100);
@@ -150,7 +129,6 @@ public class MapPanel extends JPanel implements ActionListener {
         following = new JDialog(mainWindow, "following animal");
         refreshFollowing();
         following.setVisible(true);
-        //System.out.println(actionEvent.getActionCommand());
         following.setLocation(100, 100);
     }
 

@@ -11,14 +11,6 @@ public class DrawMap extends JButton {
     public DrawMap() {
     }
 
-    public DrawMap(String s) {
-        super(s);
-    }
-
-    public DrawMap(Drawable drawable) {
-        this.drawable = drawable;
-    }
-
     public void setDrawable(Drawable drawable) {
         this.drawable = drawable;
         repaint();

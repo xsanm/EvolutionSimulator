@@ -30,10 +30,6 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
     private int children;
 
 
-    public Animal() {
-
-    }
-
     public Animal(Vector2D position, Genotype genotype, double energy) {
         this.position = position;
         this.genotype = genotype;
@@ -81,15 +77,11 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
     }
 
     public void move() {
-
         years++;
         Vector2D oldPosition = this.position;
-        //TODO
         Vector2D moveVector = genotype.genToUnitVector(this.orientation).add(this.position).add(new Vector2D(dataManager.getMapWidth(), dataManager.getMapHeight()));
         Vector2D newPosition = new Vector2D(moveVector.x % dataManager.getMapWidth(), moveVector.y % dataManager.getMapHeight());
         this.position = newPosition;
-        //System.out.println("rooszam sie" + oldPosition + newPosition);
-        //System.out.println(this);
         this.positionChanged(this, oldPosition, newPosition);
     }
 

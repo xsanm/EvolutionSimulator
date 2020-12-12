@@ -90,18 +90,16 @@ public class DataPanel extends JPanel implements ActionListener {
         addGB(new JLabel("Two Maps"), 0, 9, 1, 1);
         addGB(twoMapCheckbox, 1, 9, 1, 1);
 
-
         JSeparator sep1 = new JSeparator();
         addGB(sep1, 0, 10, 2, 1);
 
         appplyBtn = new JButton("Apply Changes");
-        appplyBtn.addActionListener(simulationEngine);
-        appplyBtn.addActionListener(this);
+        appplyBtn.addActionListener(simulationEngine::applyChanges);
+        appplyBtn.addActionListener(this::applyChanges);
         addGB(appplyBtn, 0, 11, 1, 1);
 
         resetBtn = new JButton("Reset Default");
-        resetBtn.addActionListener(simulationEngine);
-        resetBtn.addActionListener(this);
+        resetBtn.addActionListener(simulationEngine::resetDefault);
         addGB(resetBtn, 1, 11, 1, 1);
 
         JSeparator sep2 = new JSeparator();
@@ -124,68 +122,59 @@ public class DataPanel extends JPanel implements ActionListener {
         addGB(new Label("Map1 Steering"), 0, 16, 2, 1);
 
         startBtn1 = new JButton("START 1");
-        startBtn1.addActionListener(simulationEngine);
-        startBtn1.addActionListener(this);
+        startBtn1.addActionListener(simulationEngine::start1);
+        startBtn1.addActionListener(this::start1);
         addGB(startBtn1, 0, 17, 1, 1);
 
         stopBtn1 = new JButton("STOP 1");
-        stopBtn1.addActionListener(simulationEngine);
-        stopBtn1.addActionListener(this);
+        stopBtn1.addActionListener(simulationEngine::stop1);
+        stopBtn1.addActionListener(this::stop1);
         stopBtn1.setEnabled(false);
         addGB(stopBtn1, 1, 17, 1, 1);
 
         stepBtn1 = new JButton("Make Step 1");
-        stepBtn1.addActionListener(simulationEngine);
-        stepBtn1.addActionListener(this);
+        stepBtn1.addActionListener(simulationEngine::makeStep1);
         addGB(stepBtn1, 0, 18, 1, 1);
 
         saveBtn1 = new JButton("Save 1");
-        saveBtn1.addActionListener(simulationEngine);
-        //saveBtn.addActionListener(this);
+        saveBtn1.addActionListener(simulationEngine::save1);
         addGB(saveBtn1, 1, 18, 1, 1);
 
         JSeparator sep4 = new JSeparator();
         addGB(sep4, 0, 19, 2, 1);
 
-
         addGB(new Label("Map2 Steering"), 0, 20, 2, 1);
 
         startBtn2 = new JButton("START 2");
-        startBtn2.addActionListener(simulationEngine);
-        startBtn2.addActionListener(this);
+        startBtn2.addActionListener(simulationEngine::start2);
+        startBtn2.addActionListener(this::start2);
         startBtn2.setVisible(false);
         addGB(startBtn2, 0, 21, 1, 1);
 
         stopBtn2 = new JButton("STOP 2");
-        stopBtn2.addActionListener(simulationEngine);
-        stopBtn2.addActionListener(this);
+        stopBtn2.addActionListener(simulationEngine::stop2);
+        stopBtn2.addActionListener(this::stop2);
         stopBtn2.setEnabled(false);
         stopBtn2.setVisible(false);
         addGB(stopBtn2, 1, 21, 1, 1);
 
         stepBtn2 = new JButton("Make Step 2");
-        stepBtn2.addActionListener(simulationEngine);
-        stepBtn2.addActionListener(this);
+        stepBtn2.addActionListener(simulationEngine::makeStep2);
         stepBtn2.setVisible(false);
         addGB(stepBtn2, 0, 22, 1, 1);
 
         saveBtn2 = new JButton("Save 2");
-        saveBtn2.addActionListener(simulationEngine);
-        saveBtn2.setVisible(false);
-        //saveBtn.addActionListener(this);
+        saveBtn2.addActionListener(simulationEngine::save2);
         addGB(saveBtn2, 1, 22, 1, 1);
 
         JSeparator sep5 = new JSeparator();
         addGB(sep5, 0, 19, 2, 1);
-
-
     }
 
     public void speedChanged(ChangeEvent e) {
         dataManager.setDuration(durationSilder.getValue());
         simulationEngine.speedChanged();
     }
-
 
     void addGB(Component component, int x, int y, int w, int h) {
         constraints.gridx = x;
@@ -201,72 +190,65 @@ public class DataPanel extends JPanel implements ActionListener {
         this.add(component, constraints);
     }
 
+    public void applyChanges(ActionEvent e) {
+        applyData();
+        if (dataManager.getTwoMaps()) {
+            startBtn2.setVisible(true);
+            stopBtn2.setVisible(true);
+            stepBtn2.setVisible(true);
+            saveBtn2.setVisible(true);
+        } else {
+            startBtn2.setVisible(false);
+            stopBtn2.setVisible(false);
+            stepBtn2.setVisible(false);
+            saveBtn2.setVisible(false);
+        }
+    }
+
+    public void start1(ActionEvent e) {
+        SIMULATE1 = true;
+        startBtn1.setEnabled(false);
+        stopBtn1.setEnabled(true);
+        appplyBtn.setEnabled(false);
+        resetBtn.setEnabled(false);
+        stepBtn1.setEnabled(false);
+        this.repaint();
+    }
+
+    public void start2(ActionEvent e) {
+        SIMULATE2 = true;
+        startBtn2.setEnabled(false);
+        stopBtn2.setEnabled(true);
+        appplyBtn.setEnabled(false);
+        resetBtn.setEnabled(false);
+        stepBtn2.setEnabled(false);
+    }
+
+    public void stop1(ActionEvent e) {
+        SIMULATE1 = false;
+        startBtn1.setEnabled(true);
+        stepBtn1.setEnabled(true);
+        stopBtn1.setEnabled(false);
+        if (!SIMULATE2) {
+            appplyBtn.setEnabled(true);
+            resetBtn.setEnabled(true);
+        }
+    }
+
+    public void stop2(ActionEvent e) {
+        SIMULATE2 = false;
+        startBtn2.setEnabled(true);
+        stepBtn2.setEnabled(true);
+        stopBtn2.setEnabled(false);
+        if (!SIMULATE1) {
+            appplyBtn.setEnabled(true);
+            resetBtn.setEnabled(true);
+        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()) {
-            case "Apply Changes":
-                applyData();
-                if (dataManager.getTwoMaps()) {
-                    startBtn2.setVisible(true);
-                    stopBtn2.setVisible(true);
-                    stepBtn2.setVisible(true);
-                    saveBtn2.setVisible(true);
-                } else {
-                    startBtn2.setVisible(false);
-                    stopBtn2.setVisible(false);
-                    stepBtn2.setVisible(false);
-                    saveBtn2.setVisible(false);
-                }
-                break;
-            case "START 1":
-                SIMULATE1 = true;
-                startBtn1.setEnabled(false);
-                stopBtn1.setEnabled(true);
-                appplyBtn.setEnabled(false);
-                resetBtn.setEnabled(false);
-                stepBtn1.setEnabled(false);
-                this.repaint();
-                break;
-            case "STOP 1":
-                SIMULATE1 = false;
-                startBtn1.setEnabled(true);
-                stepBtn1.setEnabled(true);
-                stopBtn1.setEnabled(false);
-                if (!SIMULATE2) {
-                    appplyBtn.setEnabled(true);
-                    resetBtn.setEnabled(true);
-                }
-                break;
-            case "START 2":
-                SIMULATE2 = true;
-                startBtn2.setEnabled(false);
-                stopBtn2.setEnabled(true);
-                appplyBtn.setEnabled(false);
-                resetBtn.setEnabled(false);
-                stepBtn2.setEnabled(false);
-                break;
-            case "STOP 2":
-                SIMULATE2 = false;
-                startBtn2.setEnabled(true);
-                stepBtn2.setEnabled(true);
-                stopBtn2.setEnabled(false);
-                if (!SIMULATE1) {
-                    appplyBtn.setEnabled(true);
-                    resetBtn.setEnabled(true);
-                }
-                break;
-            case "Make Step 1":
 
-
-                break;
-            case "Make Step 2":
-
-
-                break;
-            default:
-                System.out.println("dgfhdfh");
-        }
     }
 
     private void applyData() {
@@ -279,10 +261,6 @@ public class DataPanel extends JPanel implements ActionListener {
         dataManager.setGrassEnergy((double) grassEnergySpinner.getValue());
         dataManager.setJungleRatio((double) jungleRatioSpinner.getValue());
         dataManager.setTwoMaps(twoMapCheckbox.isSelected());
-        System.out.println("data applyied");
     }
 
-    private void resetData() {
-        this.dataManager = new DataManager();
-    }
 }

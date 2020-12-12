@@ -9,10 +9,8 @@ import java.nio.file.Path;
 
 
 public class DataManager {
-
     private int duration;
     private int startGrassNumber;
-
     private int mapWidth;
     private int mapHeight;
     private int startAnimalNumber;
@@ -22,17 +20,15 @@ public class DataManager {
     private double jungleRatio;
     private boolean twoMaps;
 
-
     public DataManager() {
         resetData();
     }
 
     public void resetData() {
-        //TODO try catch jesli plik sie zmineil
+        //TODO json file changed
         String jsonString = null;
         try {
             String path = new File("startingParameters.json").getAbsolutePath();
-            System.out.println(path);
             jsonString = Files.readString(Path.of(path));
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,7 +46,6 @@ public class DataManager {
         twoMaps = (boolean) startingData.get("twoMaps");
         startGrassNumber = (int) startingData.get("startGrassNumber");
         duration = (int) startingData.get("duration");
-
     }
 
     @Override
@@ -71,75 +66,76 @@ public class DataManager {
         return mapWidth;
     }
 
-    public double getGrassEnergy() {
-        return grassEnergy;
-    }
-
-    public double getJungleRatio() {
-        return jungleRatio;
-    }
-
-    public double getMoveEnergy() {
-        return moveEnergy;
-    }
-
-    public double getStartEnergy() {
-        return startEnergy;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public int getMapHeight() {
-        return mapHeight;
-    }
-
-    public int getStartAnimalNumber() {
-        return startAnimalNumber;
-    }
-
-    public int getStartGrassNumber() {
-        return startGrassNumber;
-    }
-    public boolean getTwoMaps() {
-        return twoMaps;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
     public void setMapWidth(int mapWidth) {
         this.mapWidth = mapWidth;
+    }
+
+    public double getGrassEnergy() {
+        return grassEnergy;
     }
 
     public void setGrassEnergy(double grassEnergy) {
         this.grassEnergy = grassEnergy;
     }
 
+    public double getJungleRatio() {
+        return jungleRatio;
+    }
+
     public void setJungleRatio(double jungleRatio) {
         this.jungleRatio = jungleRatio;
     }
 
-    public void setMapHeight(int mapHeight) {
-        this.mapHeight = mapHeight;
+    public double getMoveEnergy() {
+        return moveEnergy;
     }
 
     public void setMoveEnergy(double moveEnergy) {
         this.moveEnergy = moveEnergy;
     }
 
-    public void setStartAnimalNumber(int startAnimalNumber) {
-        this.startAnimalNumber = startAnimalNumber;
+    public double getStartEnergy() {
+        return startEnergy;
     }
 
     public void setStartEnergy(double startEnergy) {
         this.startEnergy = startEnergy;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public void setMapHeight(int mapHeight) {
+        this.mapHeight = mapHeight;
+    }
+
+    public int getStartAnimalNumber() {
+        return startAnimalNumber;
+    }
+
+    public void setStartAnimalNumber(int startAnimalNumber) {
+        this.startAnimalNumber = startAnimalNumber;
+    }
+
+    public int getStartGrassNumber() {
+        return startGrassNumber;
+    }
+
     public void setStartGrassNumber(int startGrassNumber) {
         this.startGrassNumber = startGrassNumber;
+    }
+
+    public boolean getTwoMaps() {
+        return twoMaps;
     }
 
     public void setTwoMaps(boolean twoMaps) {
