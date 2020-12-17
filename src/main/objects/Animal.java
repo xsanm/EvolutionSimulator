@@ -112,7 +112,7 @@ public class Animal implements Comparable<Animal>, Drawable, Comparator<Animal> 
     public String toString() {
         return "objects.Animal{" +
                 ", energy=" + energy +
-                "position=" + position +
+                ", position=" + position +
                 ", orientation=" + orientation +
                 ", genotype=" + genotype +
 

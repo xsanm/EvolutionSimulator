@@ -102,7 +102,19 @@ public class MapPanel extends JPanel implements ActionListener {
         if (animals != null) {
             dialogPanel.add(new JLabel("Animals:"));
             for (Animal a : animals) {
-                dialogPanel.add(new JLabel("objects.Animal energy: " + a.getEnergy() + ", genotype: " + a.getGenotype()));
+                if(a == null) return;
+                DefaultListModel<String> l1 = new DefaultListModel<>();
+                l1.addElement("Animal postion: " + a.getPosition());
+                l1.addElement("Animal energy: " + a.getEnergy());
+                l1.addElement("Animal children: " + a.getChildren());
+                l1.addElement("Animal years: " + a.getYears());
+                l1.addElement("Animal genotype: " + a.getGenotype());
+
+                JList lista = new JList();
+                lista.setModel(l1);
+                dialogPanel.add(lista);
+
+                //dialogPanel.add(new JLabel("objects.Animal energy: " + a.getEnergy() + ", genotype: " + a.getGenotype()));
                 JPanel foll = new JPanel();
                 foll.add(new JLabel("click here to follow this animal ->"));
                 JButton jb = new JButton(String.valueOf(id));
@@ -125,6 +137,7 @@ public class MapPanel extends JPanel implements ActionListener {
 
     private void followAnimal(ActionEvent actionEvent) {
         int id = Integer.parseInt(actionEvent.getActionCommand()) - 1;
+        if(animals == null || animals.isEmpty()) return;
         animalToFollow = animals.get(id);
         following = new JDialog(mainWindow, "following animal");
         refreshFollowing();
@@ -134,14 +147,23 @@ public class MapPanel extends JPanel implements ActionListener {
 
     private void refreshFollowing() {
         //.removeAll();
-        JPanel jp = new JPanel();
-        jp.setLayout(new BoxLayout(jp, BoxLayout.Y_AXIS));
-        jp.add(new JLabel(animalToFollow.toString()));
-        jp.add(new JLabel("objects.Animal Energy: " + animalToFollow.getEnergy()));
-        jp.add(new JLabel("Chlidren: " + animalToFollow.getChildren()));
-        jp.add(new JLabel("Age: " + animalToFollow.getYears()));
+        if(animalToFollow.getEnergy() <= 0) {
+            following.add(new JLabel("ANIMAL IS DEAD"));
+            following.pack();
+            return;
+        }
+        DefaultListModel<String> l1 = new DefaultListModel<>();
+        l1.addElement("Animal postion: " + animalToFollow.getPosition());
+        l1.addElement("Animal energy: " + animalToFollow.getEnergy());
+        l1.addElement("Animal children: " + animalToFollow.getChildren());
+        l1.addElement("Animal years: " + animalToFollow.getYears());
+        l1.addElement("Animal genotype: " + animalToFollow.getGenotype());
 
-        following.add(jp);
+        JList lista = new JList();
+        lista.setModel(l1);
+
+
+        following.add(lista);
         following.pack();
     }
 }
