@@ -9,11 +9,16 @@ import map.IWorldMap;
 import map.WorldMap;
 import objects.Animal;
 import objects.Genotype;
+import objects.MapElement;
+import objects.Vector2D;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SimulationEngine implements IEngine, ActionListener {
@@ -53,6 +58,7 @@ public class SimulationEngine implements IEngine, ActionListener {
         statManager1.resetStats();
         statManager2.resetStats();
 
+
         this.map1 = new WorldMap(dataManager, mapPanel1, statManager1);
         this.map2 = new WorldMap(dataManager, mapPanel2, statManager2);
 
@@ -62,8 +68,8 @@ public class SimulationEngine implements IEngine, ActionListener {
         statPanel1.refreshStats();
 
         if (dataManager.getTwoMaps()) {
-            map2.generateAnimals();
-            map2.generateGrasses();
+            map2.setAnimals(map1.getAnimals());
+            map2.setGrasses(map1.getGrasses());
             map2.countStats();
             map2.countStats();
             statPanel2.refreshStats();

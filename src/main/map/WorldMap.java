@@ -8,17 +8,14 @@ import objects.Genotype;
 import objects.MapElement;
 import objects.Vector2D;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class WorldMap implements IWorldMap, IPositionChangeObserver {
     private final int MAP_WIDTH;
     private final int MAP_HEIGHT;
-    protected TreeMap<Vector2D, List<Animal>> animals;
-    List<Animal> animalsList;
+    protected TreeMap<Vector2D, List<Animal>> map;
+    List<Animal> animals;
     double jungleRatio;
     MapPanel mapPanel;
     int sumOFDeadYears = 0;
@@ -36,8 +33,8 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         MAP_WIDTH = dataManager.getMapWidth();
         MAP_HEIGHT = dataManager.getMapHeight();
         this.jungleRatio = dataManager.getJungleRatio();
-        animals = new TreeMap<>();
-        animalsList = new ArrayList<>();
+        map = new TreeMap<>();
+        animals = new ArrayList<>();
         countJungleRanges();
         this.statManager = statManager;
         this.mapPanel = mapPanel;
@@ -45,11 +42,11 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
     public void generateGrasses() {
-        int cnt = (int) (dataManager.getStartGrassNumber());
+        int cnt = (dataManager.getStartGrassNumber());
         List<Vector2D> intList = new ArrayList<>();
         for (int i = 0; i < dataManager.getMapWidth(); i++)
             for (int j = 0; j < dataManager.getMapHeight(); j++)
-                if (animals.get(new Vector2D(i, j)) == null)
+                if (map.get(new Vector2D(i, j)) == null)
                     intList.add(new Vector2D(i, j));
 
         Collections.shuffle(intList);
@@ -60,12 +57,20 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
             grasses.put(el.getPosition(), el);
         }
     }
+    public void setGrasses(TreeMap<Vector2D, MapElement> grasses) {
+        this.grasses.clear();
+        for(Map.Entry<Vector2D, MapElement> entry: grasses.entrySet()) {
+            MapElement el = new MapElement(entry.getKey());
+            this.mapPanel.drawGrass(el);
+            grasses.put(el.getPosition(), el);
+            this.grasses.put(entry.getKey(), new MapElement(entry.getKey()));
+        }
+    }
 
     @Override
     public void countStats() {
-
         statManager.setAges(statManager.getAges() + 1);
-        statManager.setAnimals(animalsList.size());
+        statManager.setAnimals(animals.size());
         statManager.setGrasses(grasses.size());
         statManager.setAverageEnergy(this.getAverageEnergy());
         statManager.setAverageChildren(this.getAverageChildren());
@@ -75,18 +80,30 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
     private int getDominatingGenotype() {
-        //TODO
-        return 1;
+        int topGene[] = {0,0,0,0,0,0,0,0,0};
+        for(Animal a:animals) {
+            int genes[] = a.getGenotype().getGenes();
+            for(int i = 0; i < 32; i++) topGene[genes[i]]++;
+        }
+        int val = topGene[0];
+        int mx = 0;
+        for(int i = 1; i < 8; i++) {
+            if(topGene[i] > val) {
+                val = topGene[i];
+                mx = i;
+            }
+        }
+        return mx;
     }
 
     private double getAverageChildren() {
         double sum = 0.0;
 
-        for (Animal a : animalsList) {
+        for (Animal a : animals) {
             sum += a.getChildren();
         }
-        if (animalsList.isEmpty()) return 0.0;
-        return sum / animalsList.size();
+        if (animals.isEmpty()) return 0.0;
+        return sum / animals.size();
     }
 
     private double getAverageLife() {
@@ -96,32 +113,27 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     private double getAverageEnergy() {
         double sum = 0.0;
-        for (Animal a : animalsList) {
+        for (Animal a : animals) {
             sum += a.getEnergy();
         }
 
-        if (animalsList.isEmpty()) return 0.0;
-        return sum / animalsList.size();
+        if (animals.isEmpty()) return 0.0;
+        return sum / animals.size();
 
     }
 
     @Override
     public void getObjectsAtPosition(Vector2D vec) {
-        //System.out.println(animals.get(vec));
-        //System.out.println(grasses.get(vec));
-        //JDialog d = new JDialog(m, "dialog Box");
     }
 
     @Override
     public void redrawAnimals() {
-        for (Animal a : animalsList) {
+        for (Animal a : animals) {
             mapPanel.drawAnimal(a);
         }
     }
 
-    public MapPanel getMapPanel() {
-        return mapPanel;
-    }
+
 
     private void countJungleRanges() {
         int x = (int) (MAP_WIDTH * jungleRatio);
@@ -145,24 +157,22 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public boolean place(Animal animal) {
-        //TODO try catch
-        if (this.animals.get(animal.getPosition()) == null)
-            this.animals.put(animal.getPosition(), new ArrayList<>() {
+        if (this.map.get(animal.getPosition()) == null)
+            this.map.put(animal.getPosition(), new ArrayList<>() {
             });
 
-        this.animals.get(animal.getPosition()).add(animal);
-
+        this.map.get(animal.getPosition()).add(animal);
         return true;
     }
 
     @Override
     public boolean isOccupied(Vector2D position) {
-        return this.animals.get(position) != null && this.animals.get(position).size() > 0;
+        return this.map.get(position) != null && this.map.get(position).size() > 0;
     }
 
     @Override
     public List<Animal> objectAt(Vector2D position) {
-        return this.animals.get(position);
+        return this.map.get(position);
     }
 
     @Override
@@ -171,20 +181,21 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     }
 
 
-    public TreeMap<Vector2D, List<Animal>> getAnimals() {
-        return animals;
-    }
+    @Override
+    public void setAnimals(List<Animal> animals) {
+        this.animals.clear();
 
-    public int getMAP_HEIGHT() {
-        return MAP_HEIGHT;
-    }
-
-    public int getMAP_WIDTH() {
-        return MAP_WIDTH;
+        for(Animal a:animals){
+            Animal animal = new Animal(a.getPosition(),
+                    new Genotype(a.getGenotype().getGenes()), dataManager.getStartEnergy(), (IPositionChangeObserver) this, dataManager);
+            this.place(animal);
+            this.animals.add(animal);
+            this.mapPanel.drawAnimal(animal);
+        }
     }
 
     public void positionChanged(Animal animal, Vector2D oldPosition, Vector2D newPosition) {
-        this.animals.get(oldPosition).remove(animal);
+        this.map.get(oldPosition).remove(animal);
         this.place(animal);
     }
 
@@ -192,7 +203,7 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
         Animal animal = new Animal(new Vector2D(generateRandom(0, dataManager.getMapWidth() - 1), generateRandom(0, dataManager.getMapHeight() - 1)),
                 new Genotype(), dataManager.getStartEnergy(), (IPositionChangeObserver) this, dataManager);
         this.place(animal);
-        this.animalsList.add(animal);
+        this.animals.add(animal);
         this.mapPanel.drawAnimal(animal);
     }
 
@@ -205,155 +216,135 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
 
     @Override
     public void deleteDead() {
-        List<Animal> to_del = new ArrayList<>();
-        for (int i = 0; i < animalsList.size(); i++) {
-            Animal a = animalsList.get(i);
+        for (int i = 0; i < animals.size(); i++) {
+            Animal a = animals.get(i);
             if (a.getEnergy() <= 0) {
                 sumOfDead++;
                 sumOFDeadYears += a.getYears();
                 this.mapPanel.eraseAnimal(a);
-                animals.get(a.getPosition()).remove(a);
-                if (animals.get(a.getPosition()).isEmpty()) {
-                    animals.remove(a.getPosition());
+                map.get(a.getPosition()).remove(a);
+                if (map.get(a.getPosition()).isEmpty()) {
+                    map.remove(a.getPosition());
                 }
-                animalsList.remove(a);
-                //to_del.add(a);
+                animals.remove(a);
             }
         }
     }
 
     @Override
     public void rotate() {
-        for (Animal a : animalsList) {
+        for (Animal a : animals) {
             a.rotate();
         }
     }
 
     @Override
     public void move() {
-        for (Animal a : animalsList) {
+        for (Animal a : animals) {
             this.mapPanel.eraseAnimal(a);
             if (a.getEnergy() <= dataManager.getMoveEnergy()) {
                 a.decreaseEnergy(a.getEnergy() + 1.0);
-                continue;
+            } else {
+                a.move();
+                a.decreaseEnergy(dataManager.getMoveEnergy());
             }
-            a.move();
-            a.decreaseEnergy(dataManager.getMoveEnergy());
-            //this.mapPanel.drawAnimal(a);
         }
-
     }
 
     @Override
     public void eat() {
-        for (int i = 0; i < dataManager.getMapHeight(); i++)
-            for (int j = 0; j < dataManager.getMapWidth(); j++) {
-                Vector2D vec = new Vector2D(i, j);
-                List<Animal> animalsToEat = animals.get(vec);
-                if (animalsToEat != null && !animalsToEat.isEmpty() && grasses.get(vec) != null) {
+        for(Map.Entry<Vector2D, List<Animal>> entry: map.entrySet()) {
+            Vector2D vec = entry.getKey();
+            List<Animal> animalsToEat = entry.getValue();
+            if(isOccupied(vec) && !animalsToEat.isEmpty() && grasses.get(vec) != null) {
+                Collections.sort(animalsToEat);
 
-                    Collections.sort(animalsToEat);
-                    //System.out.println(animalsToEat);
-                    ///System.out.println("fgfh");
-
-                    if (animalsToEat.size() == 1) {
-                        animalsToEat.get(0).encreaseEnergy(dataManager.getGrassEnergy());
-                    } else {
-                        int cnt = 1;
-                        for (cnt = 1; cnt < animalsToEat.size() && animalsToEat.get(cnt - 1).getEnergy() == animalsToEat.get(cnt).getEnergy(); cnt++)
-                            ;
-                        for (int k = 0; k < cnt; k++) {
-                            animalsToEat.get(k).encreaseEnergy(dataManager.getGrassEnergy() / cnt);
-                        }
+                if (animalsToEat.size() == 1) {
+                    animalsToEat.get(0).encreaseEnergy(dataManager.getGrassEnergy());
+                } else {
+                    int cnt;
+                    for (cnt = 1; cnt < animalsToEat.size() && animalsToEat.get(cnt - 1).getEnergy() == animalsToEat.get(cnt).getEnergy(); cnt++)
+                        ;
+                    for (int k = 0; k < cnt; k++) {
+                        animalsToEat.get(k).encreaseEnergy(dataManager.getGrassEnergy() / cnt);
                     }
-
-                    MapElement grass = grasses.get(vec);
-
-                    this.mapPanel.eraseGrass(grass);
-                    //this.mapPanel.drawAnimal(animalsToEat.get(0));
-                    this.grasses.remove(grass.getPosition());
                 }
+                MapElement grass = grasses.get(vec);
+                this.mapPanel.eraseGrass(grass);
+                this.grasses.remove(grass.getPosition());
             }
-
+        }
     }
 
     @Override
     public void procreate() {
-        for (int i = 0; i < dataManager.getMapHeight(); i++)
-            for (int j = 0; j < dataManager.getMapWidth(); j++) {
-                Vector2D vec = new Vector2D(i, j);
-                List<Animal> animalsToProcreate = animals.get(vec);
-                if (animalsToProcreate != null && animalsToProcreate.size() > 1) {
+        List<Animal> animalsToAdd = new ArrayList<>();
+        for(Map.Entry<Vector2D, List<Animal>> entry: map.entrySet()) {
+            Vector2D vec = entry.getKey();
+            List<Animal> animalsToProcreate = entry.getValue();
+            if(isOccupied(vec) && animalsToProcreate.size() > 1) {
+                Collections.sort(animalsToProcreate);
+                Animal a = map.get(vec).get(0);
+                Animal b = map.get(vec).get(1);
 
-                    Collections.sort(animalsToProcreate);
-                    Animal a = animals.get(vec).get(0);
-                    Animal b = animals.get(vec).get(1);
+                if (a.getEnergy() / dataManager.getStartEnergy() < 0.5) continue;
+                if (b.getEnergy() / dataManager.getStartEnergy() < 0.5) continue;
 
-                    if (a.getEnergy() / dataManager.getStartEnergy() < 0.5) continue;
-                    if (b.getEnergy() / dataManager.getStartEnergy() < 0.5) continue;
+                a.setChildren(a.getChildren() + 1);
+                b.setChildren(b.getChildren() + 1);
 
-                    // System.out.println("ROZMNAZAM I DODAJE ANIMALA");
-
-                    a.setChildren(a.getChildren() + 1);
-                    b.setChildren(b.getChildren() + 1);
-
-                    a.decreaseEnergy(a.getEnergy() * 0.25);
-                    b.decreaseEnergy(b.getEnergy() * 0.25);
-                    Animal c = new Animal(getPosAround(vec), new Genotype(a.getGenotype().getGenes(), b.getGenotype().getGenes()), a.getEnergy() * 0.25 + b.getEnergy() * 0.25, this, dataManager);
-                    this.animalsList.add(c);
-                    this.place(c);
-                    this.mapPanel.drawAnimal(c);
-
-                }
+                a.decreaseEnergy(a.getEnergy() * 0.25);
+                b.decreaseEnergy(b.getEnergy() * 0.25);
+                Animal c = new Animal(getPosAround(vec), new Genotype(a.getGenotype().getGenes(), b.getGenotype().getGenes()), a.getEnergy() * 0.25 + b.getEnergy() * 0.25, this, dataManager);
+                animalsToAdd.add(c);
             }
+        }
 
-
+        for(Animal a: animalsToAdd) {
+            this.animals.add(a);
+            this.place(a);
+            this.mapPanel.drawAnimal(a);
+        }
     }
 
     private Vector2D getPosAround(Vector2D vec) {
-        //TODO co jesli nie ma wolnego miesjca
         List<Vector2D> stepPositions = new ArrayList<>();
 
         for (int i = -1; i <= 1; i++)
             for (int j = -1; j <= 1; j++) {
                 Vector2D v = new Vector2D((vec.x + i + dataManager.getMapWidth()) % dataManager.getMapWidth(), (vec.y + j + dataManager.getMapHeight()) % dataManager.getMapHeight());
-                if (animals.get(v) == null || animals.get(v).isEmpty()) {
+                if (!isOccupied(v)) {
                     stepPositions.add(v);
                 }
             }
-
-
-        Collections.shuffle(stepPositions);
         if (stepPositions.isEmpty()) return vec;
-        return stepPositions.get(0);
+
+        return stepPositions.get(generateRandom(0, stepPositions.size()));
     }
 
     @Override
     public void addGrass() {
         List<Vector2D> stepPositions = new ArrayList<>();
         List<Vector2D> junglePositions = new ArrayList<>();
-        for (int i = 0; i < dataManager.getMapHeight(); i++)
-            for (int j = 0; j < dataManager.getMapWidth(); j++) {
-                Vector2D vec = new Vector2D(i, j);
-                if ((animals.get(vec) == null || animals.get(vec).isEmpty()) && grasses.get(vec) == null) {
-                    if (isInJungle(vec)) {
-                        junglePositions.add(vec);
-                    } else {
-                        stepPositions.add(vec);
-                    }
+
+        for(Map.Entry<Vector2D, List<Animal>> entry: map.entrySet()) {
+            Vector2D vec = entry.getKey();
+            if(!isOccupied(vec)){
+                if (isInJungle(vec)) {
+                    junglePositions.add(vec);
+                } else {
+                    stepPositions.add(vec);
                 }
             }
-
-        Collections.shuffle(stepPositions);
-        Collections.shuffle(junglePositions);
+        }
 
         if (!stepPositions.isEmpty()) {
-            MapElement el = new MapElement(stepPositions.get(0));
+            MapElement el = new MapElement(stepPositions.get(generateRandom(0, stepPositions.size())));
             this.mapPanel.drawGrass(el);
             grasses.put(el.getPosition(), el);
         }
         if (!junglePositions.isEmpty()) {
-            MapElement el = new MapElement(junglePositions.get(0));
+            MapElement el = new MapElement(junglePositions.get(generateRandom(0, junglePositions.size())));
             this.mapPanel.drawGrass(el);
             grasses.put(el.getPosition(), el);
         }
@@ -367,5 +358,15 @@ public class WorldMap implements IWorldMap, IPositionChangeObserver {
     private boolean isInJungle(Vector2D position) {
         return position.follows(getJungleBegin()) && position.precedes(getJungleEnd());
     }
+
+    public TreeMap<Vector2D, MapElement> getGrasses() {
+        return grasses;
+    }
+
+    @Override
+    public List<Animal> getAnimals() {
+        return animals;
+    }
+
 
 }

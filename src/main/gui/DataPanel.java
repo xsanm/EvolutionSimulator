@@ -165,6 +165,7 @@ public class DataPanel extends JPanel implements ActionListener {
 
         saveBtn2 = new JButton("Save 2");
         saveBtn2.addActionListener(simulationEngine::save2);
+        saveBtn2.setVisible(false);
         addGB(saveBtn2, 1, 22, 1, 1);
 
         JSeparator sep5 = new JSeparator();
@@ -212,6 +213,7 @@ public class DataPanel extends JPanel implements ActionListener {
         appplyBtn.setEnabled(false);
         resetBtn.setEnabled(false);
         stepBtn1.setEnabled(false);
+        saveBtn1.setEnabled(false);
         this.repaint();
     }
 
@@ -222,6 +224,7 @@ public class DataPanel extends JPanel implements ActionListener {
         appplyBtn.setEnabled(false);
         resetBtn.setEnabled(false);
         stepBtn2.setEnabled(false);
+        saveBtn2.setEnabled(false);
     }
 
     public void stop1(ActionEvent e) {
@@ -229,6 +232,7 @@ public class DataPanel extends JPanel implements ActionListener {
         startBtn1.setEnabled(true);
         stepBtn1.setEnabled(true);
         stopBtn1.setEnabled(false);
+        saveBtn1.setEnabled(true);
         if (!SIMULATE2) {
             appplyBtn.setEnabled(true);
             resetBtn.setEnabled(true);
@@ -240,6 +244,7 @@ public class DataPanel extends JPanel implements ActionListener {
         startBtn2.setEnabled(true);
         stepBtn2.setEnabled(true);
         stopBtn2.setEnabled(false);
+        saveBtn2.setEnabled(true);
         if (!SIMULATE1) {
             appplyBtn.setEnabled(true);
             resetBtn.setEnabled(true);

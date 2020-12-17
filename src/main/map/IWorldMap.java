@@ -2,6 +2,7 @@ package map;
 
 import gui.MapPanel;
 import objects.Animal;
+import objects.MapElement;
 import objects.Vector2D;
 
 import java.util.List;
@@ -41,12 +42,8 @@ public interface IWorldMap {
      * @return Object or null if the position is not occupied.
      */
     List<Animal> objectAt(Vector2D position);
+    
 
-    TreeMap<Vector2D, List<Animal>> getAnimals();
-
-    public int getMAP_HEIGHT();
-
-    public int getMAP_WIDTH();
 
     public Vector2D getJungleBegin();
 
@@ -54,7 +51,6 @@ public interface IWorldMap {
 
     void addRandomAnimal();
 
-    public MapPanel getMapPanel();
 
     public void generateAnimals();
 
@@ -77,4 +73,13 @@ public interface IWorldMap {
     void getObjectsAtPosition(Vector2D vec);
 
     void redrawAnimals();
+    
+
+    public void setGrasses(TreeMap<Vector2D, MapElement> grasses);
+
+    TreeMap<Vector2D, MapElement> getGrasses();
+
+    List<Animal> getAnimals();
+
+    void setAnimals(List<Animal> animals);
 }

@@ -31,8 +31,6 @@ public class Genotype {
     }
 
     public Genotype(int[] genesFromParentA, int[] genesFromParentB) {
-        //0 - 31
-        //finding div ids
         int div1 = generateRandom(1, 30);
         int div2;
         if (div1 < 15) {
@@ -60,9 +58,7 @@ public class Genotype {
     }
 
     //fixing lack of genes
-    //TODO optimalization
     private void fixLackOfGenes() {
-        //edgecases
         this.genes[0] = 0;
         this.genes[31] = 7;
         for (int i = 0; i < 31; i++) {
