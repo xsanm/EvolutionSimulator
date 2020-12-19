@@ -25,7 +25,6 @@ public class DataManager {
     }
 
     public void resetData() {
-        //TODO json file changed
         String jsonString = null;
         try {
             String path = new File("startingParameters.json").getAbsolutePath();

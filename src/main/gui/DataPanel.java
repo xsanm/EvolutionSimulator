@@ -54,9 +54,9 @@ public class DataPanel extends JPanel implements ActionListener {
         heightSpinner = new JSpinner(new SpinnerNumberModel(dataManager.getMapHeight(), 3, 50, 1));
         animalsNumberSpinner = new JSpinner(new SpinnerNumberModel(dataManager.getStartAnimalNumber(), 0, 1000, 1));
         grassNumberSpinner = new JSpinner(new SpinnerNumberModel(dataManager.getStartGrassNumber(), 0, 1000, 1));
-        startEnergySpinner = new JSpinner(new SpinnerNumberModel(dataManager.getStartEnergy(), 0, 5.0, 0.1));
-        moveEnergySpinner = new JSpinner(new SpinnerNumberModel(dataManager.getMoveEnergy(), 0, 5.0, 0.1));
-        grassEnergySpinner = new JSpinner(new SpinnerNumberModel(dataManager.getGrassEnergy(), 0, 5.0, 0.1));
+        startEnergySpinner = new JSpinner(new SpinnerNumberModel(dataManager.getStartEnergy(), 0, 45.0, 0.1));
+        moveEnergySpinner = new JSpinner(new SpinnerNumberModel(dataManager.getMoveEnergy(), 0, 45.0, 0.1));
+        grassEnergySpinner = new JSpinner(new SpinnerNumberModel(dataManager.getGrassEnergy(), 0, 45.0, 0.1));
         jungleRatioSpinner = new JSpinner(new SpinnerNumberModel(dataManager.getJungleRatio(), 0, 1.0, 0.1));
         twoMapCheckbox = new JCheckBox();
 
