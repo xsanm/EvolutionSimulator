@@ -7,8 +7,5 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES />
-    <excluded>
-      <root url="file://$USER_HOME$" />
-    </excluded>
   </library>
 </component>
