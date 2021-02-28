@@ -31,6 +31,6 @@ Allows you to run two maps, specify details of each map, count and save statisti
 
 **Field Details**
 
-![alt text](https://github.com/xsanm/EvolutionSimulator/blob/main/pics/layout.png)
+![alt text](https://github.com/xsanm/EvolutionSimulator/blob/main/pics/details.png)
 
 After click on map field you can check the details of animals that are present there.
